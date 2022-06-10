@@ -68,7 +68,6 @@ class Container(BoxLayout):
 
         # Variables
         self.POLEMODE = 0
-        self.FLIGHT = 0
         self.PUBLISHWP = 0
         self.OdometryRecieved = 0
         self.ImuRecieved = 0
@@ -94,6 +93,7 @@ class Container(BoxLayout):
             self.ids['backToPos'].disabled = False
             self.ids['lower'].disabled = False
             self.ids['lift_pole'].disabled = False
+            self.ids['land'].disabled = False
         except Exception as exc:
             self.ids['console'].text = "MSF Error"
             print('Error: ', exc)
@@ -128,32 +128,37 @@ class Container(BoxLayout):
             self.publish_wp_service()
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
             print("Publish Waypoints disabled")
-        if(self.FLIGHT == 0): 
-            print("take off")
-            reset_integrator_service = rospy.ServiceProxy('impedance_module/reset_integrator', Empty)
-            takeoff_service = rospy.ServiceProxy('take_off', Empty)
-            try:
-                reset_integrator_service()
-                self.ids['console'].text = "Console:  Integrators reset"
-            except rospy.ServiceException as exc:
-                print_warn("Was not able to reset integrators, error: {}".format(exc))
-                self.ids['console'].text = "Console:  Was not able to reset integrators, error: {}".format(exc)
-            try:
-                takeoff_service()
-                self.FLIGHT = 1
-                self.ids['console'].text = "Console:  Taking Off"
-                self.ids['takeoff'].text = 'Land'
-                print("Taking off.")
-            except rospy.ServiceException as exc:
-                print_warn("Not able to take off, error: %s"%exc)
-                self.ids['console'].text = "Console:  Not able to take off, error: %s"%exc
-        else:
-            land_service = rospy.ServiceProxy('land', Empty)
-            land_service()
-            self.ids['console'].text = "Console:  Landing"
-            self.ids['takeoff'].text = 'Take Off'
-            print("Landing.")
-            self.FLIGHT = 0
+        
+        print("take off")
+        reset_integrator_service = rospy.ServiceProxy('impedance_module/reset_integrator', Empty)
+        takeoff_service = rospy.ServiceProxy('take_off', Empty)
+        try:
+            reset_integrator_service()
+            self.ids['console'].text = "Console:  Integrators reset"
+        except rospy.ServiceException as exc:
+            print_warn("Was not able to reset integrators, error: {}".format(exc))
+            self.ids['console'].text = "Console:  Was not able to reset integrators, error: {}".format(exc)
+        try:
+            takeoff_service()
+            self.ids['console'].text = "Console:  Taking Off"
+            print("Taking off.")
+        except rospy.ServiceException as exc:
+            print_warn("Not able to take off, error: %s"%exc)
+            self.ids['console'].text = "Console:  Not able to take off, error: %s"%exc
+            
+
+    #Land Button
+    def land(self):
+        if(self.PUBLISHWP == 1):
+            self.PUBLISHWP = 0
+            self.publish_wp_service()
+            self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
+            print("Publish Waypoints disabled")
+        land_service = rospy.ServiceProxy('land', Empty)
+        land_service()
+        self.ids['console'].text = "Console:  Landing"
+        print("Landing.")
+
 
     #Grab and Realease Pole Button
     def GrabPole(self):
@@ -380,22 +385,35 @@ class Container(BoxLayout):
     def text_x(self):
         self.ids['x'].value = float(self.ids['text_x'].text)
         self.silder_x()
-        print("Enter")
+        if (self.PUBLISHWP == 1):
+            self.ids['console'].text = "Console:  Waypoints published"
+        else:
+            self.ids['console'].text = "Console:  Please enable Publish Waypoints"
+
 
     def text_y(self):
         self.ids['y'].value = float(self.ids['text_y'].text)
         self.silder_x()
-        print("Enter")
+        if (self.PUBLISHWP == 1):
+            self.ids['console'].text = "Console:  Waypoints published"
+        else:
+            self.ids['console'].text = "Console:  Please enable Publish Waypoints"
 
     def text_z(self):
         self.ids['z'].value = float(self.ids['text_z'].text)
         self.silder_x()
-        print("Enter")
+        if (self.PUBLISHWP == 1):
+            self.ids['console'].text = "Console:  Waypoints published"
+        else:
+            self.ids['console'].text = "Console:  Please enable Publish Waypoints"
 
     def text_yaw(self):
         self.ids['yaw'].value = float(self.ids['text_yaw'].text)
         self.silder_x()
-        print("Enter")
+        if (self.PUBLISHWP == 1):
+            self.ids['console'].text = "Console:  Waypoints published"
+        else:
+            self.ids['console'].text = "Console:  Please enable Publish Waypoints"
 
 class GeranosApp(App):
     def build(self):

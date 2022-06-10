@@ -185,7 +185,7 @@
 						id: minus_yaw
 						text: '-'
 						size_hint: 0.1, 1	
-						on_press: yaw.value = yaw.value - 1
+						on_press: yaw.value = yaw.value - 5
 
 					Slider: 
 						id: yaw
@@ -199,7 +199,7 @@
 						id: plus_yaw
 						text: '+'
 						size_hint: 0.1, 1
-						on_press: yaw.value = yaw.value + 1
+						on_press: yaw.value = yaw.value + 5
 
 					TextInput:
 						id: text_yaw
@@ -296,8 +296,10 @@
 						on_press: root.backToPos()
 
 					Button:
+						disabled: True
 						id: land
-						text: 'Au no nüt'
+						text: 'Land'
+						on_press: root.land()
 
 					Button:
 						disabled: True
@@ -325,6 +327,7 @@
 				id: console
 				text: 'Console:'
 				text_size: self.size
+				font_size: '24sp'
 				halign: 'left'
 				valign: 'middle'
 
