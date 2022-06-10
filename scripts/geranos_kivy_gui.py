@@ -14,11 +14,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
 from kivy.clock import Clock
-# from kivy.garden.matplotlib import FigureCanvasKivyAgg
-
-import matplotlib
-# matplotlib.use('module://kivy.garden.matplotlib.backend_kivy')
-import matplotlib.pyplot as plt
 
 import rospy
 import roslaunch
@@ -41,38 +36,6 @@ from geometry_msgs.msg import PoseStamped, TransformStamped
 #Config.set('graphics','window_state','maximized') #fullscreen
 Config.set('graphics', 'width', 'maximized')
 Config.set('graphics', 'height', '200')
-
-class Visualiser:
-    def __init__(self):
-        self.fig, self.ax = plt.subplots()
-        self.canvas = self.fig.canvas
-        # self.ln, = plt.plot([], [], 'ro')
-        plt.plot()
-        self.x_data, self.y_data = [] , []
-        Clock.schedule_interval(self.update_plot, 1)
-
-    def plot_init(self):
-        self.ax.set_xlim(0, 10000)
-        self.ax.set_ylim(-7, 7)
-        return self.ln
-    
-    def getYaw(self, pose):
-        quaternion = (pose.orientation.x, pose.orientation.y, pose.orientation.z,
-                pose.orientation.w)
-        euler = tf.transformations.euler_from_quaternion(quaternion)
-        yaw = euler[2] 
-        return yaw   
-
-    def odom_callback(self, msg):
-        yaw_angle = self.getYaw(msg.pose.pose)
-        self.y_data.append(yaw_angle)
-        x_index = len(self.x_data)
-        self.x_data.append(x_index+1)
-    
-    def update_plot(self, frame):
-        # self.ln.set_data(self.x_data, self.y_data)
-        plt.plot(self.x_data, self.y_data)
-        self.canvas.draw_idle()
 
 class Container(BoxLayout):
 
@@ -101,11 +64,6 @@ class Container(BoxLayout):
             print("Loaded param: {}".format(self.script_path))
         except:
             print("Did not load any script.")
-
-        # Plotter:
-        # vis = Visualiser()
-        # add vis.fig as self.ids["pos_error"].add_widget(FigureCanvasKivyAgg(vis.fig))
-        # self.ids["pos_error"].add_widget(vis.canvas)
 
         # Variables
         self.POLEMODE = 0
