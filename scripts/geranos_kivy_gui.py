@@ -112,10 +112,11 @@ class Container(BoxLayout):
 
     #Start-Button
     def start(self):
-        self.PUBLISHWP = 0
-        self.publish_wp_service()
-        self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
-        prin("Publish Waypoints disabled")
+        if(self.PUBLISHWP == 1):
+            self.PUBLISHWP = 0
+            self.publish_wp_service()
+            self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
+            print("Publish Waypoints disabled")
         start_service = rospy.ServiceProxy('start', Empty)
         start_service()
         self.ids['console'].text = "Activating"
@@ -123,10 +124,11 @@ class Container(BoxLayout):
 
     #Take-Off and Land Button
     def takeoff(self):
-        self.PUBLISHWP = 0
-        self.publish_wp_service()
-        self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
-        print("Publish Waypoints disabled")
+        if(self.PUBLISHWP == 1):
+            self.PUBLISHWP = 0
+            self.publish_wp_service()
+            self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
+            print("Publish Waypoints disabled")
         if(self.FLIGHT == 0): 
             print("take off")
             reset_integrator_service = rospy.ServiceProxy('impedance_module/reset_integrator', Empty)
@@ -177,10 +179,11 @@ class Container(BoxLayout):
 
     #Go To Pole Button
     def GoTo(self):
-        self.PUBLISHWP = 0
-        self.publish_wp_service()
-        self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
-        print("Publish Waypoints disabled")
+        if(self.PUBLISHWP == 1):
+            self.PUBLISHWP = 0
+            self.publish_wp_service()
+            self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
+            print("Publish Waypoints disabled")
         go_to_pole_service = rospy.ServiceProxy('go_to_pole_service', Empty)
         print("Request Sending to Go to Pole")
         self.ids['console'].text = "Request sent to go to Pole"
@@ -202,10 +205,11 @@ class Container(BoxLayout):
 
     #Lower to Pole Button
     def lower(self):
-        self.PUBLISHWP = 0
-        self.publish_wp_service()
-        self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
-        print("Publish Waypoints disabled")
+        if(self.PUBLISHWP == 1):
+            self.PUBLISHWP = 0
+            self.publish_wp_service()
+            self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
+            print("Publish Waypoints disabled")
         print("Lower to pole")
         self.ids['console'].text = "Lowering to Grab Position"
 
