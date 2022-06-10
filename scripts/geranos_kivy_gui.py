@@ -72,6 +72,7 @@ class Container(BoxLayout):
         self.OdometryRecieved = 0
         self.ImuRecieved = 0
         self.ViconRecieved = 0
+        self.ControlRecieved = 0
 
     #-------------------------------Buttons--------------------------------------------------------
 
@@ -271,7 +272,9 @@ class Container(BoxLayout):
         pass
 
     def MotorSpeedCallback(self, msg):
-        pass
+        if(self.ControlRecieved == 0):
+            self.ids['control_checker'].text = "Controller is sending Motorspeeds"
+            self.ids['control_checker'].color = 0, 170/255, 0, 1
 
     def updateControlMode(self, msg):
         self.ids['modeControl'].text = "Mode = "+msg.data
