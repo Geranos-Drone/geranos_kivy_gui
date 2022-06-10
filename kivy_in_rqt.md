@@ -10,7 +10,7 @@ rqt
 
 Plugins --> Miscellaneous Tools --> Embed a graphical Window
 Enter in window:
-~/catkin_ws/src/mav_ui/geranos_gui_test/scripts/run_py3.sh
+~/catkin_ws/src/geranos_kivy_gui/scripts/run_py3.sh
 
 Geranos
 

@@ -9,35 +9,37 @@
 
 			Image:
 				source: 'logo_white_notext.png'
-
-			Label:
-				size_hint: 0.2, 1
-				id: battery
-				text: 'Battery V = n/A'
+				pos_hint: {'left': 1, 'top': 1}
+				size_hint: None, None
 				size: self.size
-				halign: 'right'
+				halign: 'left'
 
 			BoxLayout:
 				orientation: 'vertical'
+				padding: 20, 0, 20, 0
 
 				Label:
 					id: msf_checker
 					text: 'No Odometry recieved'
+					text_size: self.size
 					halign: 'right'
 
 				Label:
 					id: imu_checker
 					text: 'No IMU message recieved'
+					text_size:self.size
 					halign: 'right'
 
 				Label:
 					id: vicon_checker
 					text: 'No Vicon message recieved'
+					text_size:self.size
 					halign: 'right'
 
 				Label:
 					id: control_checker
 					text: 'Controller not sending Motorspeeds'
+					text_size:self.size
 					halign: 'right'
 				
 		BoxLayout:
@@ -281,11 +283,23 @@
 						text: 'DEBUG'
 						on_press: root.tester()
 
-		Label:
-			id: console
-			text: 'console'
-			halign: 'right'
+		BoxLayout:
+			orientation: 'horizontal'
+			padding: 20, 0, 20, 0
 			size_hint: 1, 0.1
+
+			Label:
+				id: console
+				text: 'console'
+				text_size: self.size
+				halign: 'left'
+
+			Label:
+				size_hint: 0.2, 1
+				id: battery
+				text: 'Battery V = n/A'
+				text_size: self.size
+				halign: 'right'
 
 <Label>:
 	font_size: '18sp'
