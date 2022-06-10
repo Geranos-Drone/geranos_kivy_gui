@@ -95,7 +95,7 @@ class Container(BoxLayout):
             self.ids['lift_pole'].disabled = False
             self.ids['land'].disabled = False
         except Exception as exc:
-            self.ids['console'].text = "MSF Error"
+            self.ids['console'].text = "Console:  MSF Error"
             print('Error: ', exc)
 
     #Switch Button
@@ -383,37 +383,61 @@ class Container(BoxLayout):
     #----------------------------Text Inputs-----------------------------------
 
     def text_x(self):
-        self.ids['x'].value = float(self.ids['text_x'].text)
-        self.silder_x()
-        if (self.PUBLISHWP == 1):
-            self.ids['console'].text = "Console:  Waypoints published"
-        else:
-            self.ids['console'].text = "Console:  Please enable Publish Waypoints"
+        try:
+            if((float(self.ids['text_x'].text) <= 5.0) & (float(self.ids['text_x'].text) >= -5.0)):
+                self.ids['x'].value = float(self.ids['text_x'].text)
+                self.silder_x()
+                if (self.PUBLISHWP == 1):
+                    self.ids['console'].text = "Console:  Waypoints published"
+                else:
+                    self.ids['console'].text = "Console:  Please enable Publish Waypoints"
+            else:
+                self.ids['console'].text = "Console:  Please enter number in scope"
+        except Exception as e:
+            self.ids['console'].text = "Console:  Please only enter Numbers"
 
 
     def text_y(self):
-        self.ids['y'].value = float(self.ids['text_y'].text)
-        self.silder_x()
-        if (self.PUBLISHWP == 1):
-            self.ids['console'].text = "Console:  Waypoints published"
-        else:
-            self.ids['console'].text = "Console:  Please enable Publish Waypoints"
+        try:
+            if((float(self.ids['text_y'].text) <= 5.0) & (float(self.ids['text_y'].text) >= -5.0)):
+                self.ids['y'].value = float(self.ids['text_y'].text)
+                self.silder_x()
+                if (self.PUBLISHWP == 1):
+                    self.ids['console'].text = "Console:  Waypoints published"
+                else:
+                    self.ids['console'].text = "Console:  Please enable Publish Waypoints"
+            else:
+                self.ids['console'].text = "Console:  Please enter number in scope"
+        except Exception as e:
+            self.ids['console'].text = "Console:  Please only enter Numbers"
 
     def text_z(self):
-        self.ids['z'].value = float(self.ids['text_z'].text)
-        self.silder_x()
-        if (self.PUBLISHWP == 1):
-            self.ids['console'].text = "Console:  Waypoints published"
-        else:
-            self.ids['console'].text = "Console:  Please enable Publish Waypoints"
+        try:
+            if((float(self.ids['text_z'].text) <= 5.0) & (float(self.ids['text_z'].text) >= -5.0)):
+                self.ids['z'].value = float(self.ids['text_z'].text)
+                self.silder_x()
+                if (self.PUBLISHWP == 1):
+                    self.ids['console'].text = "Console:  Waypoints published"
+                else:
+                    self.ids['console'].text = "Console:  Please enable Publish Waypoints"
+            else:
+                self.ids['console'].text = "Console:  Please enter number in scope"
+        except Exception as e:
+            self.ids['console'].text = "Console:  Please only enter numbers"
 
     def text_yaw(self):
-        self.ids['yaw'].value = float(self.ids['text_yaw'].text)
-        self.silder_x()
-        if (self.PUBLISHWP == 1):
-            self.ids['console'].text = "Console:  Waypoints published"
-        else:
-            self.ids['console'].text = "Console:  Please enable Publish Waypoints"
+        try:
+            if((float(self.ids['text_yaw'].text) <= 250.0) & (float(self.ids['text_yaw'].text) >= -250.0)):
+                self.ids['yaw'].value = float(self.ids['text_yaw'].text)
+                self.silder_x()
+                if (self.PUBLISHWP == 1):
+                    self.ids['console'].text = "Console:  Waypoints published"
+                else:
+                    self.ids['console'].text = "Console:  Please enable Publish Waypoints"
+            else:
+                self.ids['console'].text = "Console:  Please enter number in scope"
+        except Exception as e:
+            self.ids['console'].text = "Console:  Please only enter Numbers"
 
 class GeranosApp(App):
     def build(self):
