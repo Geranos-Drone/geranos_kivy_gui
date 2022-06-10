@@ -83,6 +83,15 @@ class Container(BoxLayout):
             init_service(1.0)
             self.ids['console'].text = "MSF initialized"
             self.ids['init'].background_color = 0, 170/255, 0, 1.0
+
+            #activate disabled Buttons
+            self.ids['reset_wp'].disabled = False
+            self.ids['publish_wp'].disabled = False
+            self.ids['start'].disabled = False
+            self.ids['takeoff'].disabled = False
+            self.ids['GoTo'].disabled = False
+            self.ids['backToPos'].disabled = False
+            self.ids['lower'].disabled = False
         except Exception as exc:
             self.ids['console'].text = "MSF Error"
             print('Error: ', exc)
