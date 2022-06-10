@@ -84,7 +84,7 @@ class Container(BoxLayout):
         init_service = rospy.ServiceProxy('pose_sensor/pose_sensor/initialize_msf_scale', InitScale)
         try:
             init_service(1.0)
-            self.ids['console'].text = "MSF initialized"
+            self.ids['console'].text = "Console:  MSF initialized"
             self.ids['init'].background_color = 0, 170/255, 0, 1.0
 
             #activate disabled Buttons
@@ -104,10 +104,10 @@ class Container(BoxLayout):
         try:
             switch_service = rospy.ServiceProxy('impedance_module/switch_control_params', Empty)
             switch_service()
-            self.ids['console'].text = "request sent to switch params"
+            self.ids['console'].text = "Console:  request sent to switch params"
             print("request sent to switch params")
         except Exception as e:
-            self.ids['console'].text = "Switch Error"
+            self.ids['console'].text = "Console:  Switch Error"
             print("Error: ", e)
 
     #Start-Button
@@ -119,7 +119,7 @@ class Container(BoxLayout):
             print("Publish Waypoints disabled")
         start_service = rospy.ServiceProxy('start', Empty)
         start_service()
-        self.ids['console'].text = "Activating"
+        self.ids['console'].text = "Console:  Activating"
         print("Activating.")
 
     #Take-Off and Land Button
@@ -135,21 +135,23 @@ class Container(BoxLayout):
             takeoff_service = rospy.ServiceProxy('take_off', Empty)
             try:
                 reset_integrator_service()
-                self.ids['console'].text = "Integrators reset"
+                self.ids['console'].text = "Console:  Integrators reset"
             except rospy.ServiceException as exc:
                 print_warn("Was not able to reset integrators, error: {}".format(exc))
+                self.ids['console'].text = "Console:  Was not able to reset integrators, error: {}".format(exc)
             try:
                 takeoff_service()
                 self.FLIGHT = 1
-                self.ids['console'].text = "Taking Off"
+                self.ids['console'].text = "Console:  Taking Off"
                 self.ids['takeoff'].text = 'Land'
                 print("Taking off.")
             except rospy.ServiceException as exc:
                 print_warn("Not able to take off, error: %s"%exc)
+                self.ids['console'].text = "Console:  Not able to take off, error: %s"%exc
         else:
             land_service = rospy.ServiceProxy('land', Empty)
             land_service()
-            self.ids['console'].text = "Landing"
+            self.ids['console'].text = "Console:  Landing"
             self.ids['takeoff'].text = 'Take Off'
             print("Landing.")
             self.FLIGHT = 0
@@ -163,17 +165,17 @@ class Container(BoxLayout):
                 grab_pole_service = rospy.ServiceProxy('grab_pole_service', Empty)
                 print("Request sent to Grab Pole")
                 grab_pole_service()
-                self.ids['console'].text = "Request sent to Grab Pole"
+                self.ids['console'].text = "Console:  Request sent to Grab Pole"
                 self.POLEMODE = 1
             else: 
                 self.ids['GrabPole'].text = 'Grab Pole'  # remove later
                 DropPole_service = rospy.ServiceProxy('/geranos/release_pole', Empty)
                 DropPole_service()
                 print("request sent detach Pole")
-                self.ids['console'].text = "Request sent to detach Pole"
+                self.ids['console'].text = "Console:  Request sent to detach Pole"
                 self.POLEMODE = 0
         except Exception as e:
-            self.ids['console'].text = "Dynamixel error: " + str(e)
+            self.ids['console'].text = "Console:  Dynamixel error: " + str(e)
             self.POLEMODE = 0
             self.ids['GrabPole'].text = 'Grab Pole'  # remove later
 
@@ -186,13 +188,13 @@ class Container(BoxLayout):
             print("Publish Waypoints disabled")
         go_to_pole_service = rospy.ServiceProxy('go_to_pole_service', Empty)
         print("Request Sending to Go to Pole")
-        self.ids['console'].text = "Request sent to go to Pole"
+        self.ids['console'].text = "Console:  Request sent to go to Pole"
         go_to_pole_service()
 
     #Trajectory Reset Button
     def reset(self):
         reset_service = rospy.ServiceProxy("reset_trajectory_service", Empty)
-        self.ids['console'].text = "Resetting Trajectories"
+        self.ids['console'].text = "Console:  Resetting Trajectories"
         print("Resetting Trajectories")
         reset_service()
 
@@ -200,7 +202,7 @@ class Container(BoxLayout):
     def backToPos(self):
         position_hold_service = rospy.ServiceProxy('back_to_position_hold', Empty)
         position_hold_service()
-        self.ids['console'].text = "Going back to position hold"
+        self.ids['console'].text = "Console:  Going back to position hold"
         print("Going back to position hold.")
 
     #Lower to Pole Button
@@ -211,7 +213,7 @@ class Container(BoxLayout):
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
             print("Publish Waypoints disabled")
         print("Lower to pole")
-        self.ids['console'].text = "Lowering to Grab Position"
+        self.ids['console'].text = "Console:  Lowering to Grab Position"
 
     #Reset Waypoints Button
     def reset_wp(self):
@@ -220,7 +222,7 @@ class Container(BoxLayout):
         self.ids['z'].value = self.pose_z
         self.ids['yaw'].value = float(self.yaw)
         print("Reset WP")
-        self.ids['console'].text = "Waypoints Reset"
+        self.ids['console'].text = "Console:  Waypoints Reset"
 
     #Publish Waypoints Button
     def publish_wp(self):
@@ -233,24 +235,24 @@ class Container(BoxLayout):
             self.ids['publish_wp'].background_color = 0, 170/255, 0, 1.0
             try:
                 self.publish_wp_service()
-                self.ids['console'].text = "Publish Waypoints enabled"
+                self.ids['console'].text = "Console:  Publish Waypoints enabled"
                 self.PUBLISHWP = 1
             except Exception as e:
                 print(e)
                 self.ids['console'].text =  e
         else:
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
-            self.ids['console'].text = "Publish Waypoints disabled"
+            self.ids['console'].text = "Console:  Publish Waypoints disabled"
             try:
                 self.publish_wp_service()
-                self.ids['console'].text = "Publish Waypoints disabled"
+                self.ids['console'].text = "Console:  Publish Waypoints disabled"
                 self.PUBLISHWP = 0
             except Exception as e:
                 print(e)
                 self.ids['console'].text =  e
 
     def tester(self):
-        print(self.yaw)
+        pass
 
     #-------------------------------ROS-----------------------------------
         

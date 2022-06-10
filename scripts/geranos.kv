@@ -1,7 +1,6 @@
 <Container>
 	BoxLayout:
 		orientation: 'vertical'
-		spacing: 20
 
 		BoxLayout:
 			orientation: 'horizontal'
@@ -23,24 +22,28 @@
 					text: 'No Odometry recieved'
 					text_size: self.size
 					halign: 'right'
+					valign: 'middle'
 
 				Label:
 					id: imu_checker
 					text: 'No IMU message recieved'
 					text_size:self.size
 					halign: 'right'
+					valign: 'middle'
 
 				Label:
 					id: vicon_checker
 					text: 'No Vicon message recieved'
 					text_size:self.size
 					halign: 'right'
+					valign: 'middle'
 
 				Label:
 					id: control_checker
 					text: 'Controller not sending Motorspeeds'
 					text_size:self.size
 					halign: 'right'
+					valign: 'middle'
 				
 		BoxLayout:
 			orientation: 'horizontal'
@@ -185,7 +188,7 @@
 
 			BoxLayout:
 				orientation: 'vertical'
-				padding: 20
+				padding: 20, 0, 20, 0
 				spacing: 20
 
 
@@ -290,9 +293,10 @@
 
 			Label:
 				id: console
-				text: 'console'
+				text: 'Console:'
 				text_size: self.size
 				halign: 'left'
+				valign: 'middle'
 
 			Label:
 				size_hint: 0.2, 1
@@ -300,6 +304,7 @@
 				text: 'Battery V = n/A'
 				text_size: self.size
 				halign: 'right'
+				valign: 'middle'
 
 <Label>:
 	font_size: '18sp'
