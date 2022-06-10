@@ -1,0 +1,286 @@
+<Container>
+	BoxLayout:
+		orientation: 'vertical'
+		spacing: 20
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint: 1, 0.2
+
+			Image:
+				source: 'logo_white_notext.png'
+
+			Label:
+				size_hint: 0.2, 1
+				id: battery
+				text: 'Battery V = n/A'
+				size: self.size
+				halign: 'right'
+
+			BoxLayout:
+				orientation: 'vertical'
+
+				Label:
+					text: 'MSF initialized'
+					halign: 'right'
+
+				Label:
+					text: 'IMU connected'
+					halign: 'right'
+
+				Label:
+					text: 'Vicon running'
+					halign: 'right'
+				
+		BoxLayout:
+			orientation: 'horizontal'
+
+			size_hint: 1, 0.6
+			BoxLayout:
+				orientation: 'vertical'
+
+				#Sliders
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Button:
+						id: reset_wp
+						text: 'Reset'
+						on_press: root.reset_wp()
+
+					Button:
+						id: publish_wp
+						text: 'Publish Waypoints' 
+						on_press: root.publish_wp()
+
+				BoxLayout: 
+					Label:
+						size_hint: 0.1, 1
+						text: 'x'
+
+					Button: 
+						id: minus_x
+						text: '-'
+						size_hint: 0.1, 1
+						on_press: x.value = x.value - 0.1
+
+					Slider: 
+						id: x
+						min: -5
+						max: 5
+						step: 0.1
+						orientation: 'horizontal'
+
+					Button: 
+						id: plus_x
+						text: '+'
+						size_hint: 0.1, 1
+						on_press: x.value = x.value + 0.1
+
+					Label:
+						size_hint: 0.1, 1 
+						text: str(round(x.value, 3)) 
+
+				BoxLayout:
+
+					Label:
+						size_hint: 0.1, 1
+						text: 'y' 
+
+					Button: 
+						id: minus_y
+						text: '-'
+						size_hint: 0.1, 1		
+						on_press: y.value = y.value - 0.1
+
+					Slider: 
+						id: y
+						min: -5
+						max: 5
+						step: 0.1
+						orientation: 'horizontal'
+
+					Button: 
+						id: plus_y
+						text: '+'
+						size_hint: 0.1, 1
+						on_press: y.value = y.value + 0.1		
+
+					Label:
+						size_hint: 0.1, 1 
+						text: str(round(y.value, 3)) 
+
+				BoxLayout:
+
+					Label:
+						size_hint: 0.1, 1
+						text: 'z' 
+
+					Button: 
+						id: minus_z
+						text: '-'
+						size_hint: 0.1, 1	
+						on_press: z.value = z.value - 0.1
+
+					Slider: 
+						id: z
+						min: -5
+						max: 5
+						step: 0.1
+						orientation: 'horizontal'
+
+					Button: 
+						id: plus_z
+						text: '+'
+						size_hint: 0.1, 1	
+						on_press: z.value = z.value + 0.1
+
+					Label:
+						size_hint: 0.1, 1 
+						text: str(round(z.value, 3)) 
+
+				BoxLayout: 
+
+					Label:
+						size_hint: 0.1, 1
+						text: 'yaw' 
+
+					Button: 
+						id: minus_yaw
+						text: '-'
+						size_hint: 0.1, 1	
+						on_press: yaw.value = yaw.value - 1
+
+					Slider: 
+						id: yaw
+						min: -250
+						max: 250
+						step: 1
+						orientation: 'horizontal'
+						on_touch_up: root.silder_x()
+
+					Button: 
+						id: plus_yaw
+						text: '+'
+						size_hint: 0.1, 1
+						on_press: yaw.value = yaw.value + 1
+
+					Label:
+						size_hint: 0.1, 1 
+						text: str(round(yaw.value, 2)) 
+
+			#Buttons
+
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 20
+				spacing: 20
+
+
+				BoxLayout:
+					orientation: 'horizontal'
+					spacing: 20
+
+					Button:
+						id: init
+						text: 'INIT MSF'
+						on_release: root.init()
+						color: 1,1,1,1
+						background_color: 205/205, 34/255, 34/255,1
+
+					Button:
+						id: switch
+						text: 'Switch'
+						on_press: root.switch()
+
+					Button:
+						id: start
+						text: 'Start'
+						on_press: root.start()
+
+					Button:
+						id: takeoff
+						text: 'Take Off'
+						on_press: root.takeoff()
+
+					Button:
+						id: GrabPole
+						text: 'Grab Pole'
+						on_press: root.GrabPole()
+
+					Button:
+						id: GoTo
+						text: 'Go To Pole'
+						on_press: root.GoTo()
+
+					Button:
+						id: reset
+						text: 'RESET'
+						on_press: root.reset()
+
+				BoxLayout:
+					orientation: 'horizontal'
+					spacing: 20 
+
+					BoxLayout:
+						orientation: 'vertical'
+						Label:
+							id: MSFmessage
+							font_size: '16sp'
+							text: 'MSF not reset.'
+
+						Label:
+							id: StatusMessage
+							font_size: '16sp'
+							text: 'State Machine Status'
+							halign: 'center'
+
+					Label:
+						id: modeControl
+						font_size: '16sp'
+						text: 'Mode of Controller'
+
+					Button:
+						id: backToPos
+						text: 'Back to\nPosition Hold'
+						halign: 'center'
+						on_press: root.backToPos()
+
+					Button:
+						id: land
+						text: 'Au no nüt'
+
+					Button:
+						id: lower
+						text: 'Lower to\nPole'
+						halign: 'center'	
+						on_press: root.lower()
+
+					Label:
+						id: modeTraj
+						font_size: '16sp'
+						text: 'Trajectory Mode'
+						halign: 'center'
+
+					Button:
+						text: 'DEBUG'
+						on_press: root.tester()
+
+		Label:
+			id: console
+			text: 'console'
+			halign: 'right'
+			size_hint: 1, 0.1
+
+<Label>:
+	font_size: '18sp'
+
+<Button>:
+	background_normal: ''
+	background_color: 120/255, 120/255, 120/255, 1
+	font_size: '18sp'
+	#on_press: self.background_color = (0/255, 0/255, 0/255, 1)
+	#on_release: self.background_color = (120/255, 120/255, 120/255, 1)
+
+<Slider>:
+	cursor_image: 'Cursor.png'
