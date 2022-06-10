@@ -25,7 +25,6 @@ from sensor_fusion_comm.srv import InitScale
 
 # messages
 from gazebo_ros_link_attacher.srv import Attach, AttachRequest, AttachResponse
-from rw_omav_controllers.msg import ErrorVectorImpedance
 from omav_hovery_msgs.msg import UAVStatus
 from mav_msgs.msg import Actuators
 from nav_msgs.msg import Odometry
@@ -44,7 +43,6 @@ class Container(BoxLayout):
         self.uav_state_sub = rospy.Subscriber("uavstate", UAVStatus, callback=self.UAVStatusCallback, queue_size=1)
         self.dynamixel_state_sub = rospy.Subscriber("dynamixel_state/state_info", String, self.updateDynamixelState)
         self.odometry_sub = rospy.Subscriber("msf_core/odometry", Odometry, callback=self.OdometryCallback)
-        self.error_vec_sub = rospy.Subscriber("error_vec", ErrorVectorImpedance, callback=self.ErrorVecCallback, queue_size=1)
         self.motor_speed_sub = rospy.Subscriber("motor_speed", Actuators, callback=self.MotorSpeedCallback, queue_size=1)
         self.control_node_sub = rospy.Subscriber("impedance_module/control_mode", String, self.updateControlMode)
         self.pole_trajectory_sub = rospy.Subscriber("geranos_planner/mode_info", String, self.updateTrajMode)
@@ -95,6 +93,7 @@ class Container(BoxLayout):
             self.ids['GoTo'].disabled = False
             self.ids['backToPos'].disabled = False
             self.ids['lower'].disabled = False
+            self.ids['lift_pole'].disabled = False
         except Exception as exc:
             self.ids['console'].text = "MSF Error"
             print('Error: ', exc)
@@ -249,16 +248,41 @@ class Container(BoxLayout):
                 self.PUBLISHWP = 0
             except Exception as e:
                 print(e)
-                self.ids['console'].text =  e
+                self.ids['console'].text =  "Console:  " + str(e)
 
-    def tester(self):
-        pass
+    #Lift Pole Button
+    def lift_pole(self):
+        if(self.PUBLISHWP == 1):
+            self.PUBLISHWP = 0
+            self.publish_wp_service()
+            self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
+            print("Publish Waypoints disabled")
+        liftPole_service = rospy.ServiceProxy("lift_pole_service", Empty)
+        liftPole_service()
+        print("lifting pole")
+        self.ids['console'].text = "Console:  Lifting Pole"
+
 
     #-------------------------------ROS-----------------------------------
         
     def UAVStatusCallback(self, msg):
         voltage = msg.motors[0].voltage
-        self.ids['battery'].text = "Battery V = " + str(voltage)
+        procentage = ((voltage-21)/25.2)*100
+        if (procentage < 0):
+            procentage = 0
+            self.ids['console'].text = "Console:  Exgange batteries immediately!!!!!"
+        elif (procentage > 100):
+            procentage = 100
+            self.ids['console'].text = "Console:  Battery voltage too high!!!"
+
+        if (voltage < 21.5):
+            self.ids['battery'].color = rot
+        elif (voltage < 22):
+            self.ids['battery'].color = gelb
+        else:
+            self.ids['battery'].color = weiss
+
+        self.ids['battery'].text = "Battery:" + str(voltage)
 
     def updateDynamixelState(self, msg):
         if msg.data == "Ready":
@@ -300,9 +324,6 @@ class Container(BoxLayout):
         if(self.ViconRecieved == 0):
             self.ids['vicon_checker'].text = "Vicon message recieved"
             self.ids['vicon_checker'].color = 0, 170/255, 0, 1
-
-    def ErrorVecCallback(self, msg):
-        pass
 
     def MotorSpeedCallback(self, msg):
         if(self.ControlRecieved == 0):

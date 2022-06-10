@@ -227,14 +227,16 @@
 
 					Button:
 						disabled: True
-						id: GoTo
-						text: 'Go To Pole'
-						on_press: root.GoTo()
+						id: lower
+						text: 'Lower to\nPole'
+						halign: 'center'	
+						on_press: root.lower()
 
 					Button:
-						id: reset
-						text: 'RESET'
-						on_press: root.reset()
+						disabled: True
+						id: lift_pole
+						text: 'Lift Pole'
+						on_press: root.lift_pole()
 
 				BoxLayout:
 					orientation: 'horizontal'
@@ -271,11 +273,10 @@
 
 					Button:
 						disabled: True
-						id: lower
-						text: 'Lower to\nPole'
-						halign: 'center'	
-						on_press: root.lower()
-
+						id: GoTo
+						text: 'Go To Pole'
+						on_press: root.GoTo()
+					
 					Label:
 						id: modeTraj
 						font_size: '16sp'
@@ -283,8 +284,9 @@
 						halign: 'center'
 
 					Button:
-						text: 'DEBUG'
-						on_press: root.tester()
+						id: reset
+						text: 'RESET'
+						on_press: root.reset()
 
 		BoxLayout:
 			orientation: 'horizontal'
