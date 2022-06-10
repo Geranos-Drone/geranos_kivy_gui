@@ -92,9 +92,16 @@
 						size_hint: 0.1, 1
 						on_press: x.value = x.value + 0.1
 
-					Label:
+					TextInput:
+						id: text_x
 						size_hint: 0.1, 1 
-						text: str(round(x.value, 3)) 
+						text: str(round(x.value, 2))
+						font_size: 16 
+						multiline: False
+						on_text_validate: root.text_x()
+						text_size: self.size
+                		halign: 'center'
+                		valign: 'middle' 
 
 				BoxLayout:
 
@@ -121,9 +128,16 @@
 						size_hint: 0.1, 1
 						on_press: y.value = y.value + 0.1		
 
-					Label:
+					TextInput:
+						id: text_y
 						size_hint: 0.1, 1 
-						text: str(round(y.value, 3)) 
+						text: str(round(y.value, 2)) 
+						font_size: 16
+						multiline: False
+						on_text_validate: root.text_y()
+						text_size: self.size
+                		halign: 'center'
+                		valign: 'middle'
 
 				BoxLayout:
 
@@ -150,9 +164,16 @@
 						size_hint: 0.1, 1	
 						on_press: z.value = z.value + 0.1
 
-					Label:
+					TextInput:
+						id: text_z
 						size_hint: 0.1, 1 
-						text: str(round(z.value, 3)) 
+						text: str(round(z.value, 2)) 
+						font_size: 16
+						multiline: False
+						on_text_validate: root.text_z()
+						text_size: self.size
+                		halign: 'center'
+                		valign: 'middle'
 
 				BoxLayout: 
 
@@ -180,9 +201,16 @@
 						size_hint: 0.1, 1
 						on_press: yaw.value = yaw.value + 1
 
-					Label:
+					TextInput:
+						id: text_yaw
 						size_hint: 0.1, 1 
 						text: str(round(yaw.value, 2)) 
+						font_size: 16
+						multiline: False
+						on_text_validate: root.text_yaw()
+						text_size: self.size
+                		halign: 'center'
+                		valign: 'middle'
 
 			#Buttons
 

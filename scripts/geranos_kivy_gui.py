@@ -262,7 +262,6 @@ class Container(BoxLayout):
         print("lifting pole")
         self.ids['console'].text = "Console:  Lifting Pole"
 
-
     #-------------------------------ROS-----------------------------------
         
     def UAVStatusCallback(self, msg):
@@ -379,7 +378,24 @@ class Container(BoxLayout):
     #----------------------------Text Inputs-----------------------------------
 
     def text_x(self):
-        pass
+        self.ids['x'].value = float(self.ids['text_x'].text)
+        self.silder_x()
+        print("Enter")
+
+    def text_y(self):
+        self.ids['y'].value = float(self.ids['text_y'].text)
+        self.silder_x()
+        print("Enter")
+
+    def text_z(self):
+        self.ids['z'].value = float(self.ids['text_z'].text)
+        self.silder_x()
+        print("Enter")
+
+    def text_yaw(self):
+        self.ids['yaw'].value = float(self.ids['text_yaw'].text)
+        self.silder_x()
+        print("Enter")
 
 class GeranosApp(App):
     def build(self):
