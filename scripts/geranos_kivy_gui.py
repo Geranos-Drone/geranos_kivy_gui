@@ -53,6 +53,9 @@ class Container(BoxLayout):
         self.imu_sub = rospy.Subscriber("vectornav/imu", Imu, self.imuCallback)
         self.vicon_sub = rospy.Subscriber("geranos-boreas/vrpn_client/estimated_transform", TransformStamped, self.viconCallback)
 
+        self.publish_wp_service = rospy.ServiceProxy('publish_wp', Empty)
+
+
         #ROS Publisher
         self.waypoint_pub = rospy.Publisher("gui/waypoint", PoseStamped, queue_size = 10)
 
@@ -109,6 +112,10 @@ class Container(BoxLayout):
 
     #Start-Button
     def start(self):
+        self.PUBLISHWP = 0
+        self.publish_wp_service()
+        self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
+        prin("Publish Waypoints disabled")
         start_service = rospy.ServiceProxy('start', Empty)
         start_service()
         self.ids['console'].text = "Activating"
@@ -116,6 +123,10 @@ class Container(BoxLayout):
 
     #Take-Off and Land Button
     def takeoff(self):
+        self.PUBLISHWP = 0
+        self.publish_wp_service()
+        self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
+        print("Publish Waypoints disabled")
         if(self.FLIGHT == 0): 
             print("take off")
             reset_integrator_service = rospy.ServiceProxy('impedance_module/reset_integrator', Empty)
@@ -166,6 +177,10 @@ class Container(BoxLayout):
 
     #Go To Pole Button
     def GoTo(self):
+        self.PUBLISHWP = 0
+        self.publish_wp_service()
+        self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
+        print("Publish Waypoints disabled")
         go_to_pole_service = rospy.ServiceProxy('go_to_pole_service', Empty)
         print("Request Sending to Go to Pole")
         self.ids['console'].text = "Request sent to go to Pole"
@@ -187,6 +202,10 @@ class Container(BoxLayout):
 
     #Lower to Pole Button
     def lower(self):
+        self.PUBLISHWP = 0
+        self.publish_wp_service()
+        self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
+        print("Publish Waypoints disabled")
         print("Lower to pole")
         self.ids['console'].text = "Lowering to Grab Position"
 
@@ -202,7 +221,6 @@ class Container(BoxLayout):
     #Publish Waypoints Button
     def publish_wp(self):
         print("Publish WP")
-        publish_wp_service = rospy.ServiceProxy('publish_wp', Empty)
         if(self.PUBLISHWP == 0):
             self.ids['x'].value = self.pose_x
             self.ids['y'].value = self.pose_y
@@ -210,7 +228,7 @@ class Container(BoxLayout):
             self.ids['yaw'].value = float(self.yaw)
             self.ids['publish_wp'].background_color = 0, 170/255, 0, 1.0
             try:
-                publish_wp_service()
+                self.publish_wp_service()
                 self.ids['console'].text = "Publish Waypoints enabled"
                 self.PUBLISHWP = 1
             except Exception as e:
@@ -220,7 +238,7 @@ class Container(BoxLayout):
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
             self.ids['console'].text = "Publish Waypoints disabled"
             try:
-                publish_wp_service()
+                self.publish_wp_service()
                 self.ids['console'].text = "Publish Waypoints disabled"
                 self.PUBLISHWP = 0
             except Exception as e:
