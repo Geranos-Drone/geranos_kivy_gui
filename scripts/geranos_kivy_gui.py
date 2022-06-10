@@ -35,7 +35,8 @@ from omav_hovery_msgs.msg import UAVStatus
 from mav_msgs.msg import Actuators
 from nav_msgs.msg import Odometry
 from std_msgs.msg import String
-from geometry_msgs.msg import PoseStamped
+from sensor_msgs.msg import Imu
+from geometry_msgs.msg import PoseStamped, TransformStamped
 
 #Config.set('graphics','window_state','maximized') #fullscreen
 Config.set('graphics', 'width', 'maximized')
@@ -85,6 +86,9 @@ class Container(BoxLayout):
         self.control_node_sub = rospy.Subscriber("impedance_module/control_mode", String, self.updateControlMode)
         self.pole_trajectory_sub = rospy.Subscriber("geranos_planner/mode_info", String, self.updateTrajMode)
         self.state_machine_sub = rospy.Subscriber("state_machine/state_info", String, self.updateState)
+        self.msf_checker_sub = rospy.Subscriber("state_machine/state_info", String, self.updateState)
+        self.imu_sub = rospy.Subscriber("vectornav/imu", Imu, self.imuCallback)
+        self.vicon_sub = rospy.Subscriber("geranos-boreas/vrpn_client/estimated_transform", TransformStamped, self.viconCallback)
 
         #ROS Publisher
         self.waypoint_pub = rospy.Publisher("gui/waypoint", PoseStamped, queue_size = 10)
@@ -107,6 +111,9 @@ class Container(BoxLayout):
         self.POLEMODE = 0
         self.FLIGHT = 0
         self.PUBLISHWP = 0
+        self.OdometryRecieved = 0
+        self.ImuRecieved = 0
+        self.ViconRecieved = 0
 
     #-------------------------------Buttons--------------------------------------------------------
 
@@ -281,6 +288,9 @@ class Container(BoxLayout):
             self.ids['GrabPole'].text = 'Grab Pole'
 
     def OdometryCallback(self, msg):
+        if(self.OdometryRecieved == 0):
+            self.ids['msf_checker'].text = "Odometry recieved"
+            self.ids['msf_checker'].color = 0, 170/255, 0, 1
         self.pose_x = msg.pose.pose.position.x
         self.pose_y = msg.pose.pose.position.y
         self.pose_z = msg.pose.pose.position.z
@@ -288,6 +298,16 @@ class Container(BoxLayout):
         rot = Rotation.from_quat((orientation.x, orientation.y, orientation.z, orientation.w))
         rot_euler = rot.as_euler('xyz', degrees=True)
         self.yaw = rot_euler[2]
+
+    def imuCallback(self, msg):
+        if(self.ImuRecieved == 0):
+            self.ids['imu_checker'].text = "IMU message recieved"
+            self.ids['imu_checker'].color = 0, 170/255, 0, 1
+
+    def viconCallback(self, msg):
+        if(self.ViconRecieved == 0):
+            self.ids['vicon_checker'].text = "Vicon message recieved"
+            self.ids['vicon_checker'].color = 0, 170/255, 0, 1
 
     def ErrorVecCallback(self, msg):
         pass

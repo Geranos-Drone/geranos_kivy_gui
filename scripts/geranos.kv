@@ -21,15 +21,23 @@
 				orientation: 'vertical'
 
 				Label:
-					text: 'MSF initialized'
+					id: msf_checker
+					text: 'No Odometry recieved'
 					halign: 'right'
 
 				Label:
-					text: 'IMU connected'
+					id: imu_checker
+					text: 'No IMU message recieved'
 					halign: 'right'
 
 				Label:
-					text: 'Vicon running'
+					id: vicon_checker
+					text: 'No Vicon message recieved'
+					halign: 'right'
+
+				Label:
+					id: control_checker
+					text: 'Controller not sending Motorspeeds'
 					halign: 'right'
 				
 		BoxLayout:
