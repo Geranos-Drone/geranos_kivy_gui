@@ -6,6 +6,8 @@
 
 from scipy.spatial.transform import Rotation
 
+import numpy as np
+
 import kivy
 from kivy.app import App
 from kivy.config import Config
@@ -75,6 +77,10 @@ class Container(BoxLayout):
         self.ImuRecieved = 0
         self.ViconRecieved = 0
         self.ControlRecieved = 0
+        self.x_value = 0
+        self.y_value = 0
+        self.z_value = 0
+        self.yaw_value = 0
 
     #-------------------------------Buttons--------------------------------------------------------
 
@@ -223,12 +229,21 @@ class Container(BoxLayout):
 
     #Reset Waypoints Button
     def reset_wp(self):
-        self.ids['x'].value = self.pose_x
-        self.ids['y'].value = self.pose_y
-        self.ids['z'].value = self.pose_z
-        self.ids['yaw'].value = float(self.yaw)
-        print("Reset WP")
-        self.ids['console'].text = "Console:  Waypoints Reset"
+        try:
+            self.ids['x'].value = self.pose_x
+            self.ids['y'].value = self.pose_y
+            self.ids['z'].value = self.pose_z
+            self.ids['yaw'].value = float(self.yaw)
+
+            self.x_value = self.pose_x
+            self.y_value = self.pose_y
+            self.z_value = self.pose_z
+            self.yaw_value = float(self.yaw)
+
+            print("Reset WP")
+            self.ids['console'].text = "Console:  Waypoints Reset"
+        except Exception as e:
+            self.ids['console'].text = "Console:  " + str(e)
 
     #Publish Waypoints Button
     def publish_wp(self):
@@ -238,6 +253,12 @@ class Container(BoxLayout):
             self.ids['y'].value = self.pose_y
             self.ids['z'].value = self.pose_z
             self.ids['yaw'].value = float(self.yaw)
+
+            self.x_value = self.pose_x
+            self.y_value = self.pose_y
+            self.z_value = self.pose_z
+            self.yaw_value = float(self.yaw)
+            
             self.ids['publish_wp'].background_color = 0, 170/255, 0, 1.0
             try:
                 self.publish_wp_service()
@@ -322,7 +343,7 @@ class Container(BoxLayout):
 
     def OdometryCallback(self, msg):
         if(self.OdometryRecieved == 0):
-            self.ids['msf_checker'].text = "Odometry recieved"
+            self.ids['msf_checker'].text = "Odometry received"
             self.ids['msf_checker'].color = 0, 170/255, 0, 1
         self.pose_x = msg.pose.pose.position.x
         self.pose_y = msg.pose.pose.position.y
@@ -334,12 +355,12 @@ class Container(BoxLayout):
 
     def imuCallback(self, msg):
         if(self.ImuRecieved == 0):
-            self.ids['imu_checker'].text = "IMU message recieved"
+            self.ids['imu_checker'].text = "IMU message received"
             self.ids['imu_checker'].color = 0, 170/255, 0, 1
 
     def viconCallback(self, msg):
         if(self.ViconRecieved == 0):
-            self.ids['vicon_checker'].text = "Vicon message recieved"
+            self.ids['vicon_checker'].text = "Vicon message received"
             self.ids['vicon_checker'].color = 0, 170/255, 0, 1
 
     def MotorSpeedCallback(self, msg):
@@ -375,23 +396,33 @@ class Container(BoxLayout):
     #--------------------------Sliders--------------------------------------
     
     def silder_x(self):
-        print("Values changed to " + str(self.ids['x'].value) + ", " + str(self.ids['y'].value) + ", "+ str(self.ids['z'].value) + ", "+ str(self.ids['yaw'].value)) 
         if(self.PUBLISHWP == 1):
-            try:
-                msg = PoseStamped()
-                msg.pose.position.x = float(self.ids['x'].value)
-                msg.pose.position.y = float(self.ids['y'].value)
-                msg.pose.position.z = float(self.ids['z'].value)
-                orientation = msg.pose.orientation
-                rot = Rotation.from_euler('xyz', (0.0, 0.0, float(self.ids['yaw'].value)), degrees=True)
-                orientation.x, orientation.y, orientation.z, orientation.w = rot.as_quat()
-
-                msg.header.frame_id = "Waypoints"
-                msg.header.stamp = rospy.Time(0)
-                self.waypoint_pub.publish(msg)
-                print("published waypoints")
-            except Exception as e:
-                print(e)
+            if (np.abs(self.x_value - self.ids['x'].value) <= 0.3) & (np.abs(self.y_value - self.ids['y'].value) <= 0.3) & (np.abs(self.z_value - self.ids['z'].value) <= 0.3) & (np.abs(self.yaw_value - self.ids['yaw'].value) <= 5.0):
+                try:
+                    msg = PoseStamped()
+                    msg.pose.position.x = float(self.ids['x'].value)
+                    msg.pose.position.y = float(self.ids['y'].value)
+                    msg.pose.position.z = float(self.ids['z'].value)
+                    orientation = msg.pose.orientation
+                    rot = Rotation.from_euler('xyz', (0.0, 0.0, float(self.ids['yaw'].value)), degrees=True)
+                    orientation.x, orientation.y, orientation.z, orientation.w = rot.as_quat()
+                    msg.header.frame_id = "Waypoints"
+                    msg.header.stamp = rospy.Time(0)
+                    self.waypoint_pub.publish(msg)
+                    print("published waypoints")
+                    self.x_value = self.ids['x'].value
+                    self.y_value = self.ids['y'].value
+                    self.z_value = self.ids['z'].value
+                    self.yaw_value = self.ids['yaw'].value
+                except Exception as e: 
+                    print(e)
+            else:
+                self.ids['console'].text = "Console:  Input Step too big"
+                self.ids['x'].value = self.x_value
+                self.ids['y'].value = self.y_value
+                self.ids['z'].value = self.z_value
+                self.ids['yaw'].value = self.yaw_value
+                self.silder_x()
         else:
             print("Please enable Publish Waypoints")
 
