@@ -63,6 +63,11 @@
 						on_press: root.reset_wp()
 
 					Button:
+						id: fine_mode
+						text: 'Fine Mode' 
+						on_press: root.fine_mode()
+
+					Button:
 						disabled: True
 						id: publish_wp
 						text: 'Publish Waypoints' 
@@ -77,7 +82,7 @@
 						id: minus_x
 						text: '-'
 						size_hint: 0.1, 1
-						on_press: x.value = x.value - 0.1
+						on_press: root.minus_x()
 
 					Slider: 
 						id: x
@@ -90,7 +95,7 @@
 						id: plus_x
 						text: '+'
 						size_hint: 0.1, 1
-						on_press: x.value = x.value + 0.1
+						on_press: root.plus_x()
 
 					TextInput:
 						id: text_x
@@ -113,7 +118,7 @@
 						id: minus_y
 						text: '-'
 						size_hint: 0.1, 1		
-						on_press: y.value = y.value - 0.1
+						on_press: root.minus_y()
 
 					Slider: 
 						id: y
@@ -126,7 +131,7 @@
 						id: plus_y
 						text: '+'
 						size_hint: 0.1, 1
-						on_press: y.value = y.value + 0.1		
+						on_press: root.plus_y()	
 
 					TextInput:
 						id: text_y
@@ -149,7 +154,7 @@
 						id: minus_z
 						text: '-'
 						size_hint: 0.1, 1	
-						on_press: z.value = z.value - 0.1
+						on_press: root.minus_z()
 
 					Slider: 
 						id: z
@@ -162,7 +167,7 @@
 						id: plus_z
 						text: '+'
 						size_hint: 0.1, 1	
-						on_press: z.value = z.value + 0.1
+						on_press: root.plus_z()
 
 					TextInput:
 						id: text_z
@@ -185,7 +190,7 @@
 						id: minus_yaw
 						text: '-'
 						size_hint: 0.1, 1	
-						on_press: yaw.value = yaw.value - 5
+						on_press: root.minus_yaw()
 
 					Slider: 
 						id: yaw
@@ -199,7 +204,7 @@
 						id: plus_yaw
 						text: '+'
 						size_hint: 0.1, 1
-						on_press: yaw.value = yaw.value + 5
+						on_press: root.plus_yaw()
 
 					TextInput:
 						id: text_yaw

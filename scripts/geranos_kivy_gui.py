@@ -1,4 +1,4 @@
-#!/home/tim/anaconda3/bin/python
+#!/usr/bin/env python 
 
 
 #runs on python 3.7
@@ -70,6 +70,7 @@ class Container(BoxLayout):
         # Variables
         self.POLEMODE = 0
         self.PUBLISHWP = 0
+        self.FINEMODE = 0
         self.OdometryRecieved = 0
         self.ImuRecieved = 0
         self.ViconRecieved = 0
@@ -256,6 +257,17 @@ class Container(BoxLayout):
                 print(e)
                 self.ids['console'].text =  "Console:  " + str(e)
 
+    def fine_mode(self):
+        if (self.FINEMODE == 0):
+            self.ids['fine_mode'].background_color = 0, 170/255, 0, 1.0
+            self.FINEMODE = 1
+            self.ids['console'].text = "Console:  Fine Mode enabled"
+        else:
+            self.ids['fine_mode'].background_color = 120/255, 120/255, 120/255, 1
+            self.FINEMODE = 0
+            self.ids['console'].text = "Console:  Fine Mode disabled"
+
+
     #Lift Pole Button
     def lift_pole(self):
         if(self.PUBLISHWP == 1):
@@ -382,6 +394,55 @@ class Container(BoxLayout):
                 print(e)
         else:
             print("Please enable Publish Waypoints")
+
+    def minus_x(self):
+        if (self.FINEMODE == 0):
+            self.ids['x'].value = self.ids['x'].value - 0.1
+        else:
+            self.ids['x'].value = self.ids['x'].value - 0.01
+
+    def plus_x(self):
+        if (self.FINEMODE == 0):
+            self.ids['x'].value = self.ids['x'].value + 0.1
+        else:
+            self.ids['x'].value = self.ids['x'].value + 0.01
+
+    def minus_y(self):
+        if (self.FINEMODE == 0):
+            self.ids['y'].value = self.ids['y'].value - 0.1
+        else:
+            self.ids['y'].value = self.ids['y'].value - 0.01
+
+    def plus_y(self):
+        if (self.FINEMODE == 0):
+            self.ids['y'].value = self.ids['y'].value + 0.1
+        else:
+            self.ids['y'].value = self.ids['y'].value + 0.01
+
+    def minus_z(self):
+        if (self.FINEMODE == 0):
+            self.ids['z'].value = self.ids['z'].value - 0.1
+        else:
+            self.ids['z'].value = self.ids['z'].value - 0.01
+
+    def plus_z(self):
+        if (self.FINEMODE == 0):
+            self.ids['z'].value = self.ids['z'].value + 0.1
+        else:
+            self.ids['z'].value = self.ids['z'].value + 0.01
+
+    def minus_yaw(self):
+        if (self.FINEMODE == 0):
+            self.ids['yaw'].value = self.ids['yaw'].value - 5
+        else:
+            self.ids['yaw'].value = self.ids['yaw'].value - 1
+
+    def plus_yaw(self):
+        if (self.FINEMODE == 0):
+            self.ids['yaw'].value = self.ids['yaw'].value + 5
+        else:
+            self.ids['yaw'].value = self.ids['yaw'].value + 1
+
 
     #----------------------------Text Inputs-----------------------------------
 
