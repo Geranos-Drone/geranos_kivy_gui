@@ -53,6 +53,9 @@ class Container(BoxLayout):
         self.msf_checker_sub = rospy.Subscriber("state_machine/state_info", String, self.updateState)
         self.imu_sub = rospy.Subscriber("/vectornav/IMU", Imu, self.imuCallback)
         self.vicon_sub = rospy.Subscriber("geranos_boreas/vrpn_client/estimated_transform", TransformStamped, self.viconCallback)
+        self.pole_mount_vicon_sub = rospy.Subscriber("geranos_pole_mount/vrpn_client/estimated_transform", TransformStamped, self.PoleMountViconCallback)
+        self.pole_white_vicon_sub = rospy.Subscriber("geranos_pole_white/vrpn_client/estimated_transform", TransformStamped, self.PoleWhiteViconCallback)
+        self.pole_grey_vicon_sub = rospy.Subscriber("geranos_pole_grey/vrpn_client/estimated_transform", TransformStamped, self.PoleGreyViconCallback)
 
         self.publish_wp_service = rospy.ServiceProxy('publish_wp', Empty)
 
@@ -381,6 +384,18 @@ class Container(BoxLayout):
             self.ids['control_checker'].text = "Controller is sending Motorspeeds"
             self.ids['control_checker'].color = 0, 170/255, 0, 1
             self.ControlRecieved = 1
+
+    def PoleMountViconCallback(self, msg):
+            self.ids['pole_mount'].text = "Vicon message for pole mount received"
+            self.ids['control_checker'].color = 0, 170/255, 0, 1
+
+    def PoleWhiteViconCallback(self, msg):
+            self.ids['pole_white'].text = "Vicon message for pole white received"
+            self.ids['control_checker'].color = 0, 170/255, 0, 1
+
+    def PoleGreyViconCallback(self, msg):
+            self.ids['pole_grey'].text = "Vicon message for pole grey received"
+            self.ids['control_checker'].color = 0, 170/255, 0, 1
 
     def updateControlMode(self, msg):
         self.ids['modeControl'].text = "Mode = "+msg.data
