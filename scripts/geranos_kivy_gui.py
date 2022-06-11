@@ -1,4 +1,5 @@
-#!/usr/bin/env python 
+#!/home/tim/anaconda3/bin/python
+
 
 #runs on python 3.7
 #run: 'pip install kivy'
@@ -43,13 +44,13 @@ class Container(BoxLayout):
         self.uav_state_sub = rospy.Subscriber("uavstate", UAVStatus, callback=self.UAVStatusCallback, queue_size=1)
         self.dynamixel_state_sub = rospy.Subscriber("dynamixel_state/state_info", String, self.updateDynamixelState)
         self.odometry_sub = rospy.Subscriber("msf_core/odometry", Odometry, callback=self.OdometryCallback)
-        self.motor_speed_sub = rospy.Subscriber("motor_speed", Actuators, callback=self.MotorSpeedCallback, queue_size=1)
+        self.motor_speed_sub = rospy.Subscriber("command/motor_speed", Actuators, callback=self.MotorSpeedCallback, queue_size=1)
         self.control_node_sub = rospy.Subscriber("impedance_module/control_mode", String, self.updateControlMode)
         self.pole_trajectory_sub = rospy.Subscriber("geranos_planner/mode_info", String, self.updateTrajMode)
         self.state_machine_sub = rospy.Subscriber("state_machine/state_info", String, self.updateState)
         self.msf_checker_sub = rospy.Subscriber("state_machine/state_info", String, self.updateState)
-        self.imu_sub = rospy.Subscriber("vectornav/imu", Imu, self.imuCallback)
-        self.vicon_sub = rospy.Subscriber("geranos-boreas/vrpn_client/estimated_transform", TransformStamped, self.viconCallback)
+        self.imu_sub = rospy.Subscriber("/vectornav/IMU", Imu, self.imuCallback)
+        self.vicon_sub = rospy.Subscriber("geranos_boreas/vrpn_client/estimated_transform", TransformStamped, self.viconCallback)
 
         self.publish_wp_service = rospy.ServiceProxy('publish_wp', Empty)
 
@@ -166,7 +167,7 @@ class Container(BoxLayout):
             print('Polemode' + str(self.POLEMODE))
             if(self.POLEMODE == 0):
                 self.ids['GrabPole'].text = 'Drop Pole'  # remove later
-                grab_pole_service = rospy.ServiceProxy('grab_pole_service', Empty)
+                grab_pole_service = rospy.ServiceProxy('grab_pole', Empty)
                 print("Request sent to Grab Pole")
                 grab_pole_service()
                 self.ids['console'].text = "Console:  Request sent to Grab Pole"
@@ -298,7 +299,7 @@ class Container(BoxLayout):
         elif msg.data == "Gripping":
             self.ids['GrabPole'].text = 'Gripping'
             self.ids['GrabPole'].disabled = True 
-        elif msg.data == "Grabbed":
+        elif msg.data == "Gripped":
             self.ids['GrabPole'].text = 'Release Pole'
             self.ids['GrabPole'].disabled = False 
         elif msg.data == "Releasing":
@@ -330,9 +331,11 @@ class Container(BoxLayout):
             self.ids['vicon_checker'].color = 0, 170/255, 0, 1
 
     def MotorSpeedCallback(self, msg):
-        if(self.ControlRecieved == 0):
+        if ((self.ControlRecieved == 0) & (msg.angular_velocities[0] > 1.0)):
+
             self.ids['control_checker'].text = "Controller is sending Motorspeeds"
             self.ids['control_checker'].color = 0, 170/255, 0, 1
+            self.ControlRecieved = 1
 
     def updateControlMode(self, msg):
         self.ids['modeControl'].text = "Mode = "+msg.data
