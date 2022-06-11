@@ -43,7 +43,7 @@ class Container(BoxLayout):
         super(Container, self).__init__(**kwargs)
         self.uav_state_sub = rospy.Subscriber("uavstate", UAVStatus, callback=self.UAVStatusCallback, queue_size=1)
         self.dynamixel_state_sub = rospy.Subscriber("dynamixel_state/state_info", String, self.updateDynamixelState)
-        self.odometry_sub = rospy.Subscriber("msf_core/odometry", Odometry, callback=self.OdometryCallback)
+        self.odometry_sub = rospy.Subscriber("transformed_odometry", Odometry, callback=self.OdometryCallback)
         self.motor_speed_sub = rospy.Subscriber("command/motor_speed", Actuators, callback=self.MotorSpeedCallback, queue_size=1)
         self.control_node_sub = rospy.Subscriber("impedance_module/control_mode", String, self.updateControlMode)
         self.pole_trajectory_sub = rospy.Subscriber("geranos_planner/mode_info", String, self.updateTrajMode)
