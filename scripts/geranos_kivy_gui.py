@@ -314,13 +314,15 @@ class Container(BoxLayout):
         
     def UAVStatusCallback(self, msg):
         voltage = msg.motors[0].voltage
-        procentage = ((voltage-21)/25.2)*100
-        if (procentage < 0):
-            procentage = 0
+        percentage = ((voltage-21)/25.2)*100
+        if (percentage < 0):
+            percentage = 0
             self.ids['console'].text = "Console:  Exgange batteries immediately!!!!!"
-        elif (procentage > 100):
-            procentage = 100
+        elif (percentage > 100):
+            percentage = 100
             self.ids['console'].text = "Console:  Battery voltage too high!!!"
+
+        self.ids['battery'].text = "Battery: " + str(voltage)
 
         if (voltage < 21.5):
             self.ids['battery'].color = rot
@@ -329,7 +331,6 @@ class Container(BoxLayout):
         else:
             self.ids['battery'].color = weiss
 
-        self.ids['battery'].text = "Battery:" + str(voltage)
 
     def updateDynamixelState(self, msg):
         if msg.data == "Ready":
