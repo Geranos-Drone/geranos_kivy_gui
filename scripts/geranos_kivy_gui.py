@@ -387,15 +387,15 @@ class Container(BoxLayout):
 
     def PoleMountViconCallback(self, msg):
             self.ids['pole_mount'].text = "Vicon message for pole mount received"
-            self.ids['control_checker'].color = 0, 170/255, 0, 1
+            self.ids['pole_mount'].color = 0, 170/255, 0, 1
 
     def PoleWhiteViconCallback(self, msg):
             self.ids['pole_white'].text = "Vicon message for pole white received"
-            self.ids['control_checker'].color = 0, 170/255, 0, 1
+            self.ids['pole_white'].color = 0, 170/255, 0, 1
 
     def PoleGreyViconCallback(self, msg):
             self.ids['pole_grey'].text = "Vicon message for pole grey received"
-            self.ids['control_checker'].color = 0, 170/255, 0, 1
+            self.ids['pole_grey'].color = 0, 170/255, 0, 1
 
     def updateControlMode(self, msg):
         self.ids['modeControl'].text = "Mode = "+msg.data
