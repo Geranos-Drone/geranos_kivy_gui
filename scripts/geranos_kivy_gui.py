@@ -120,29 +120,17 @@ class Container(BoxLayout):
             self.ids['console'].text = "Console:  Switch Error"
             print("Error: ", e)
 
-    #Start-Button
+    #Reset Integrators Button
     def start(self):
-        if(self.PUBLISHWP == 1):
-            self.PUBLISHWP = 0
-            self.publish_wp_service()
-            self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
-            print("Publish Waypoints disabled")
-        self.ids['console'].text = "Console:  Activating"
-        print("Activating.")
+        self.ids['console'].text = "Console:  Resetting Integrators"
+        print("Resetting Integrators.")
         reset_integrator_service = rospy.ServiceProxy('impedance_module/reset_integrator', Empty)
-        start_service = rospy.ServiceProxy('start', Empty)
         try:
             reset_integrator_service()
             print("Integrators reset.")
         except rospy.ServiceException as exc:
             print_warn("Was not able to reset integrators, error: {}".format(exc))
             self.ids['console'].text = "Console:  " + "Was not able to reset integrators, error: {}".format(exc)
-        try:
-            start_service()
-            print("Activating.")
-        except rospy.ServiceException as exc:
-            print_warn("Not able to start, error: %s"%exc)
-            self.ids['console'].text = "Console:  " + "Not able to start, error: %s"%exc
 
     #Take-Off and Land Button
     def takeoff(self):
@@ -419,7 +407,7 @@ class Container(BoxLayout):
     
     def silder_x(self):
         if(self.PUBLISHWP == 1):
-            if (np.abs(self.x_value - self.ids['x'].value) <= 0.3) & (np.abs(self.y_value - self.ids['y'].value) <= 0.3) & (np.abs(self.z_value - self.ids['z'].value) <= 0.3) & (np.abs(self.yaw_value - self.ids['yaw'].value) <= 5.0):
+            if (np.abs(self.x_value - self.ids['x'].value) <= 0.3) & (np.abs(self.y_value - self.ids['y'].value) <= 0.3) & (np.abs(self.z_value - self.ids['z'].value) <= 0.3) & (np.abs(self.yaw_value - self.ids['yaw'].value) <= 10.0):
                 try:
                     msg = PoseStamped()
                     msg.pose.position.x = float(self.ids['x'].value)
