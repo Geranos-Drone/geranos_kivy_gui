@@ -239,7 +239,9 @@ class Container(BoxLayout):
             self.publish_wp_service()
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
             print("Publish Waypoints disabled")
-        print("Lower to pole")
+        grab_pole_service = rospy.ServiceProxy('grab_pole_service', Empty)
+        print("Request Sending to Lower Drone to Grab Pole")
+        grab_pole_service()
         self.ids['console'].text = "Console:  Lowering to Grab Position"
 
     #Reset Waypoints Button
@@ -264,15 +266,7 @@ class Container(BoxLayout):
     def publish_wp(self):
         print("Publish WP")
         if(self.PUBLISHWP == 0):
-            self.ids['x'].value = self.pose_x
-            self.ids['y'].value = self.pose_y
-            self.ids['z'].value = self.pose_z
-            self.ids['yaw'].value = float(self.yaw)
-
-            self.x_value = self.pose_x
-            self.y_value = self.pose_y
-            self.z_value = self.pose_z
-            self.yaw_value = float(self.yaw)
+            self.reset_wp()
             
             self.ids['publish_wp'].background_color = 0, 170/255, 0, 1.0
             try:
