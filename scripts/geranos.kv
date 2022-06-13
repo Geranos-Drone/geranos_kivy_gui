@@ -5,70 +5,141 @@
 		BoxLayout:
 			orientation: 'horizontal'
 			size_hint: 1, 0.2
+			padding: 40, 0, 40, 0
 
 			Image:
-				source: 'logo_white_notext.png'
+				source: 'logo_white_horizontal.png'
 				pos_hint: {'left': 1, 'top': 1}
-				size_hint: None, None
-				size: self.size
-				halign: 'left'
+
+
+			Label:
+				text: '#LIFTIT'
+				font_size: '60sp'
+				bold: True
+				text_size: self.size
+				halign: 'right'
+				valign: 'middle'
+
+		BoxLayout:
+			orientation: 'horizontal'
+
+			Image:
+				source: 'Boreas_transparent.png'
 
 			BoxLayout:
 				orientation: 'vertical'
 				padding: 20, 0, 20, 0
 
-				Label:
-					id: msf_checker
-					text: 'No Odometry received'
-					text_size: self.size
-					halign: 'right'
-					valign: 'middle'
+				BoxLayout:
+					orientation: 'horizontal'
 
-				Label:
-					id: imu_checker
-					text: 'No IMU message received'
-					text_size:self.size
-					halign: 'right'
-					valign: 'middle'
+					Label:
+						text: 'GUI'
+						text_size: self.size
+						halign: 'right'
+						valign: 'middle'
 
-				Label:
-					id: control_checker
-					text: 'Controller not sending Motorspeeds'
-					text_size:self.size
-					halign: 'right'
-					valign: 'middle'
+					Image:
+						size_hint: 0.2, 1
+						source: 'Checkbox_checked.png'
 
-			BoxLayout:
-				orientation: 'vertical'
-				padding: 20, 0, 20, 0
+				BoxLayout:
+					orientation: 'horizontal'
 
-				Label:
-					id: vicon_checker
-					text: 'No Vicon message received'
-					text_size:self.size
-					halign: 'right'
-					valign: 'middle'
+					Label:
+						text: 'Odometry'
+						text_size: self.size
+						halign: 'right'
+						valign: 'middle'
 
-				Label:
-					id: pole_mount
-					text: 'No Vicon message for pole mount'
-					text_size: self.size
-					halign: 'right'
-					valign: 'middle'
+					Image:
+						id: msf_checker
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
 
-				Label:
-					id: pole_grey
-					text: 'No Vicon message for pole grey'
-					text_size: self.size
-					halign: 'right'
-					valign: 'middle'
+				BoxLayout:
+					orientation: 'horizontal'
 
-				Label:
-					id: pole_white
-					text: 'No Vicon message for pole white'
-					text_size: self.size
-					halign: 'right'
-					valign: 'middle'
+					Label:
+						text: 'IMU'
+						text_size:self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: imu_checker
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+				BoxLayout: 
+					orientation: 'horizontal'
+
+					Label:
+						text: 'Motorspeeds'
+						text_size:self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: control_checker
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'Boreas'
+						text_size:self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: vicon_checker
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'Pole Mount'
+						text_size: self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: pole_mount
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'Grey Pole'
+						text_size: self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: pole_grey
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'White Pole'
+						text_size: self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: pole_white
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
 				
 		BoxLayout:
 			orientation: 'horizontal'

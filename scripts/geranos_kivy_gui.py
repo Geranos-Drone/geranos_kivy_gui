@@ -1,4 +1,3 @@
-#!/home/tim/anaconda3/bin/python 
 
 
 #runs on python 3.7
@@ -339,8 +338,7 @@ class Container(BoxLayout):
 
     def OdometryCallback(self, msg):
         if(self.OdometryRecieved == 0):
-            self.ids['msf_checker'].text = "Odometry received"
-            self.ids['msf_checker'].color = 0, 170/255, 0, 1
+            self.ids['msf_checker'].source = 'Checkbox_checked.png'
         self.pose_x = msg.pose.pose.position.x
         self.pose_y = msg.pose.pose.position.y
         self.pose_z = msg.pose.pose.position.z
@@ -351,33 +349,27 @@ class Container(BoxLayout):
 
     def imuCallback(self, msg):
         if(self.ImuRecieved == 0):
-            self.ids['imu_checker'].text = "IMU message received"
-            self.ids['imu_checker'].color = 0, 170/255, 0, 1
+            self.ids['imu_checker'].source = 'Checkbox_checked.png'
 
     def viconCallback(self, msg):
         if(self.ViconRecieved == 0):
-            self.ids['vicon_checker'].text = "Vicon message received"
-            self.ids['vicon_checker'].color = 0, 170/255, 0, 1
+            self.ids['vicon_checker'].source = 'Checkbox_checked.png'
 
     def MotorSpeedCallback(self, msg):
         if ((self.ControlRecieved == 0) & (msg.angular_velocities[0] > 1.0)):
 
-            self.ids['control_checker'].text = "Controller is sending Motorspeeds"
-            self.ids['control_checker'].color = 0, 170/255, 0, 1
+            self.ids['control_checker'].source = 'Checkbox_checked.png'
             self.ControlRecieved = 1
 
     def PoleMountViconCallback(self, msg):
-            self.ids['pole_mount'].text = "Vicon message for pole mount received"
-            self.ids['pole_mount'].color = 0, 170/255, 0, 1
+            self.ids['pole_mount'].source = 'Checkbox_checked.png'
 
     def PoleWhiteViconCallback(self, msg):
-            self.ids['pole_white'].text = "Vicon message for pole white received"
-            self.ids['pole_white'].color = 0, 170/255, 0, 1
+            self.ids['pole_white'].source = 'Checkbox_checked.png'
 
     def PoleGreyViconCallback(self, msg):
-            self.ids['pole_grey'].text = "Vicon message for pole grey received"
-            self.ids['pole_grey'].color = 0, 170/255, 0, 1
-
+            self.ids['pole_grey'].source = 'Checkbox_checked.png'
+            
     def updateControlMode(self, msg):
         self.ids['modeControl'].text = "Mode = "+msg.data
 
