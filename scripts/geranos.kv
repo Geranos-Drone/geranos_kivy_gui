@@ -32,6 +32,17 @@
 					valign: 'middle'
 
 				Label:
+					id: control_checker
+					text: 'Controller not sending Motorspeeds'
+					text_size:self.size
+					halign: 'right'
+					valign: 'middle'
+
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 20, 0, 20, 0
+
+				Label:
 					id: vicon_checker
 					text: 'No Vicon message received'
 					text_size:self.size
@@ -56,13 +67,6 @@
 					id: pole_white
 					text: 'No Vicon message for pole white'
 					text_size: self.size
-					halign: 'right'
-					valign: 'middle'
-
-				Label:
-					id: control_checker
-					text: 'Controller not sending Motorspeeds'
-					text_size:self.size
 					halign: 'right'
 					valign: 'middle'
 				
@@ -275,9 +279,11 @@
 						on_press: root.takeoff()
 
 					Button:
-						id: GrabPole
-						text: 'Grab Pole'
-						on_press: root.GrabPole()
+						disabled: True
+						id: GoTo
+						text: 'Go To Pole'
+						on_press: root.GoTo()
+						background_color: 75/255, 142/255, 250/255, 1
 
 					Button:
 						disabled: True
@@ -285,12 +291,14 @@
 						text: 'Lower to\nPole'
 						halign: 'center'	
 						on_press: root.lower()
+						background_color: 75/255, 142/255, 250/255, 1
 
 					Button:
 						disabled: True
 						id: lift_pole
 						text: 'Lift Pole'
 						on_press: root.lift_pole()
+						background_color: 75/255, 142/255, 250/255, 1
 
 				BoxLayout:
 					orientation: 'horizontal'
@@ -328,10 +336,10 @@
 						on_press: root.land()
 
 					Button:
-						disabled: True
-						id: GoTo
-						text: 'Go To Pole'
-						on_press: root.GoTo()
+						id: GrabPole
+						text: 'Grab Pole'
+						on_press: root.GrabPole()
+						background_color: 75/255, 142/255, 250/255, 1
 					
 					Label:
 						id: modeTraj
@@ -343,6 +351,7 @@
 						id: reset
 						text: 'RESET'
 						on_press: root.reset()
+						background_color: 75/255, 142/255, 250/255, 1
 
 		BoxLayout:
 			orientation: 'horizontal'
@@ -372,8 +381,6 @@
 	background_normal: ''
 	background_color: 120/255, 120/255, 120/255, 1
 	font_size: '18sp'
-	#on_press: self.background_color = (0/255, 0/255, 0/255, 1)
-	#on_release: self.background_color = (120/255, 120/255, 120/255, 1)
 
 <Slider>:
 	cursor_image: 'Cursor.png'
