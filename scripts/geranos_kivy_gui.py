@@ -4,6 +4,7 @@
 #runs on python 3.7
 #run: 'pip install kivy'
 
+
 from scipy.spatial.transform import Rotation
 
 import numpy as np
@@ -11,12 +12,12 @@ import numpy as np
 import kivy
 from kivy.app import App
 from kivy.config import Config
+Config.set('graphics','window_state','maximized') #fullscreen
 from kivy.uix.label import Label
 from kivy.uix.slider import Slider
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
-from kivy.clock import Clock
 
 import rospy
 import roslaunch
@@ -34,10 +35,6 @@ from nav_msgs.msg import Odometry
 from std_msgs.msg import String
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import PoseStamped, TransformStamped
-
-#Config.set('graphics','window_state','maximized') #fullscreen
-Config.set('graphics', 'width', 'maximized')
-Config.set('graphics', 'height', '200')
 
 class Container(BoxLayout):
 
@@ -275,6 +272,7 @@ class Container(BoxLayout):
                 print(e)
                 self.ids['console'].text =  "Console:  " + str(e)
 
+    #Fine Mode Button
     def fine_mode(self):
         if (self.FINEMODE == 0):
             self.ids['fine_mode'].background_color = 0, 170/255, 0, 1.0
