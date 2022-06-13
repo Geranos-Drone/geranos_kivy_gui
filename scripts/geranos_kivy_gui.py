@@ -1,4 +1,4 @@
-
+#!/home/tim/anaconda3/bin/python
 
 #runs on python 3.7
 #run: 'pip install kivy'
@@ -302,7 +302,7 @@ class Container(BoxLayout):
         percentage = ((voltage-21)/25.2)*100
         if (percentage < 0):
             percentage = 0
-            self.ids['console'].text = "Console:  Exgange batteries immediately!!!!!"
+            self.ids['console'].text = "Console:  Exgange batteries."
         elif (percentage > 100):
             percentage = 100
             self.ids['console'].text = "Console:  Battery voltage too high!!!"
@@ -310,11 +310,11 @@ class Container(BoxLayout):
         self.ids['battery'].text = "Battery: " + str(voltage)
 
         if (voltage < 21.5):
-            self.ids['battery'].color = rot
+            self.ids['battery'].color = 205/255, 34/255, 34/255, 1
         elif (voltage < 22):
-            self.ids['battery'].color = gelb
+            self.ids['battery'].color = 242/255, 226/255, 51/255, 1
         else:
-            self.ids['battery'].color = weiss
+            self.ids['battery'].color = 1, 1, 1, 1
 
 
     def updateDynamixelState(self, msg):
@@ -357,7 +357,6 @@ class Container(BoxLayout):
 
     def MotorSpeedCallback(self, msg):
         if ((self.ControlRecieved == 0) & (msg.angular_velocities[0] > 1.0)):
-
             self.ids['control_checker'].source = 'Checkbox_checked.png'
             self.ControlRecieved = 1
 
