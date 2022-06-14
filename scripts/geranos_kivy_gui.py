@@ -208,6 +208,9 @@ class Container(BoxLayout):
         self.ids['console'].text = "Console:  Resetting Trajectories"
         print("Resetting Trajectories")
         reset_service()
+        self.ids['GoTo'].disabled = False
+        self.ids['lower'].disabled = False
+        self.ids['lift_pole'].disabled = False
 
     #Back to Position Hold Button
     def backToPos(self):
@@ -374,6 +377,27 @@ class Container(BoxLayout):
 
     def updateTrajMode(self, msg):
         self.ids['modeTraj'].text = "Mode =\n"+msg.data
+        mode = self.ids['modeTraj'].text
+        if(mode == "PLACE_WHITE"):
+            self.ids['GoTo'].text = "Go To Mount"
+            self.ids['lower'].text = "Lower to\nplace"
+            self.ids['lift_pole'].text = "Fly up"
+        elif (mode == "GET_GREY"):
+            self.ids['GoTo'].text = "Go To Grey"
+            self.ids['lower'].text = "Lower to\nPole"
+            self.ids['lift_pole'].text = "Lift Pole"
+        elif (mode == "PLACE_GREY"):
+            self.ids['GoTo'].text = "Go To Mount"
+            self.ids['lower'].text = "Lower to\nplace"
+            self.ids['lift_pole'].text = "Fly up"
+        elif (mode == "DONE"):
+            self.ids['GoTo'].disabled = True
+            self.ids['lower'].disabled = True
+            self.ids['lift_pole'].disabled = True
+        else:
+            self.ids['GoTo'].text = "Go To White"
+            self.ids['lower'].text = "Lower to\nPole"
+            self.ids['lift_pole'].text = "Lift Pole"
 
     def updateState(self, msg):
         colour = self.colourSwitcher(msg.data)
