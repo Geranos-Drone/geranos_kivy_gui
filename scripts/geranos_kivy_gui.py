@@ -302,12 +302,12 @@ class Container(BoxLayout):
         percentage = ((voltage-21)/25.2)*100
         if (percentage < 0):
             percentage = 0
-            self.ids['console'].text = "Console:  Exgange batteries."
+            self.ids['console'].text = "Console:  Exchange batteries!"
         elif (percentage > 100):
             percentage = 100
             self.ids['console'].text = "Console:  Battery voltage too high!!!"
 
-        self.ids['battery'].text = "Battery: " + str(voltage)
+        self.ids['battery'].text = "Battery: " + str(voltage) + " V"
 
         if (voltage < 21.5):
             self.ids['battery'].color = 205/255, 34/255, 34/255, 1
