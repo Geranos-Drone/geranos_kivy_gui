@@ -1,7 +1,8 @@
-#!/home/tim/anaconda3/bin/python
+#!/usr/bin/python
+##!/home/tim/anaconda3/bin/python
 
 #runs on python 3.7
-#run: 'pip install kivy'
+#run: 'pip3 install kivy'
 
 
 from scipy.spatial.transform import Rotation
@@ -35,6 +36,13 @@ from std_msgs.msg import String
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import PoseStamped, TransformStamped
 
+
+# print in yellow
+def print_warn(text):
+    fg = lambda text, color: "\33[38;5;" + str(color) + "m" + str(text) + "\33[0m"
+    print(fg(text, 11))
+
+
 class Container(BoxLayout):
 
     def __init__(self, **kwargs):
@@ -59,14 +67,13 @@ class Container(BoxLayout):
         #ROS Publisher
         self.waypoint_pub = rospy.Publisher("gui/waypoint", PoseStamped, queue_size = 10)
 
-        rospy.init_node('omav_gui')
         self.script_path = 'not available'
         try:
             self.script_path = rospy.get_param("~script_path")
             self.button_runScript.configure(state=NORMAL)
             print("Loaded param: {}".format(self.script_path))
         except:
-            print("Did not load any script.")
+            print_warn("Did not load any script.")
 
         # Variables
         self.POLEMODE = 0
@@ -80,6 +87,7 @@ class Container(BoxLayout):
         self.y_value = 0
         self.z_value = 0
         self.yaw_value = 0
+
 
     #-------------------------------Buttons--------------------------------------------------------
 
@@ -261,8 +269,8 @@ class Container(BoxLayout):
                 self.ids['console'].text = "Console:  Publish Waypoints enabled"
                 self.PUBLISHWP = 1
             except Exception as e:
-                print(e)
-                self.ids['console'].text =  e
+                print_warn(e)
+                self.ids['console'].text =  "Console:  " + str(e)
         else:
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
             self.ids['console'].text = "Console:  Publish Waypoints disabled"
@@ -271,7 +279,7 @@ class Container(BoxLayout):
                 self.ids['console'].text = "Console:  Publish Waypoints disabled"
                 self.PUBLISHWP = 0
             except Exception as e:
-                print(e)
+                print_warn(e)
                 self.ids['console'].text =  "Console:  " + str(e)
 
     #Fine Mode Button
@@ -420,7 +428,7 @@ class Container(BoxLayout):
     
     def silder_x(self):
         if(self.PUBLISHWP == 1):
-            if (np.abs(self.x_value - self.ids['x'].value) <= 0.3) & (np.abs(self.y_value - self.ids['y'].value) <= 0.3) & (np.abs(self.z_value - self.ids['z'].value) <= 0.3) & (np.abs(self.yaw_value - self.ids['yaw'].value) <= 10.0):
+            if (np.abs(self.x_value - self.ids['x'].value) <= 0.3) & (np.abs(self.y_value - self.ids['y'].value) <= 0.3) & (np.abs(self.z_value - self.ids['z'].value) <= 0.3) & (np.abs(self.yaw_value - self.ids['yaw'].value) <= 30.0):
                 try:
                     msg = PoseStamped()
                     msg.pose.position.x = float(self.ids['x'].value)
@@ -438,7 +446,8 @@ class Container(BoxLayout):
                     self.z_value = self.ids['z'].value
                     self.yaw_value = self.ids['yaw'].value
                 except Exception as e: 
-                    print(e)
+                    print_warn(e)
+                    self.ids['console'].text =  "Console:  " + str(e)
             else:
                 self.ids['console'].text = "Console:  Input Step too big"
                 self.ids['x'].value = self.x_value
