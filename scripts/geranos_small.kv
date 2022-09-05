@@ -1,0 +1,459 @@
+<Container>
+	BoxLayout:
+		orientation: 'vertical'
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint: 1, 0.2
+			padding: 40, 0, 40, 0
+
+			Image:
+				source: 'logo_white_horizontal.png'
+				pos_hint: {'left': 1, 'top': 1}
+
+
+			Label:
+				text: '#LIFTIT'
+				font_size: '60sp'
+				bold: True
+				text_size: self.size
+				halign: 'right'
+				valign: 'middle'
+
+			Image:
+				source: 'Boreas_transparent.png'
+
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 20, 0, 20, 0
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'GUI'
+						text_size: self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						size_hint: 0.2, 1
+						source: 'Checkbox_checked.png'
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'Odometry'
+						text_size: self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: msf_checker
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'IMU'
+						text_size:self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: imu_checker
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+				BoxLayout: 
+					orientation: 'horizontal'
+
+					Label:
+						text: 'Motorspeeds'
+						text_size:self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: control_checker
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+			
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 20, 0, 20, 0
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'Boreas'
+						text_size:self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: vicon_checker
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'Pole Mount'
+						text_size: self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: pole_mount
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'Grey Pole'
+						text_size: self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: pole_grey
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Label:
+						text: 'White Pole'
+						text_size: self.size
+						halign: 'right'
+						valign: 'middle'
+
+					Image:
+						id: pole_white
+						size_hint: 0.2, 1
+						source: 'Checkbox.png'
+				
+		BoxLayout:
+			orientation: 'horizontal'
+
+			size_hint: 1, 0.6
+			BoxLayout:
+				orientation: 'vertical'
+
+				#Sliders
+				BoxLayout:
+					orientation: 'horizontal'
+
+					Button:
+						disabled: True
+						id: reset_wp
+						text: 'Reset'
+						on_press: root.reset_wp()
+
+					Button:
+						id: fine_mode
+						text: 'Fine Mode' 
+						on_press: root.fine_mode()
+
+					Button:
+						disabled: True
+						id: publish_wp
+						text: 'Publish Waypoints' 
+						on_press: root.publish_wp()
+
+				BoxLayout: 
+					Label:
+						size_hint: 0.1, 1
+						text: 'x'
+
+					Button: 
+						id: minus_x
+						font_size: '50sp'
+						text: '-'
+						size_hint: 0.1, 1
+						on_press: root.minus_x()
+
+					Slider: 
+						id: x
+						min: -5
+						max: 5
+						step: 0.1
+						orientation: 'horizontal'
+
+					Button: 
+						id: plus_x
+						font_size: '50sp'
+						text: '+'
+						size_hint: 0.1, 1
+						on_press: root.plus_x()
+
+					TextInput:
+						id: text_x
+						size_hint: 0.1, 1 
+						text: str(round(x.value, 2))
+						font_size: '30sp'
+						multiline: False
+						on_text_validate: root.text_x()
+						text_size: self.size
+                		halign: 'center'
+                		padding: [0, (self.height-self.line_height)/2]
+
+				BoxLayout:
+
+					Label:
+						size_hint: 0.1, 1
+						text: 'y' 
+
+					Button: 
+						id: minus_y
+						text: '-'
+						font_size: '50sp'
+						size_hint: 0.1, 1		
+						on_press: root.minus_y()
+
+					Slider: 
+						id: y
+						min: -5
+						max: 5
+						step: 0.1
+						orientation: 'horizontal'
+
+					Button: 
+						id: plus_y
+						text: '+'
+						font_size: '50sp'
+						size_hint: 0.1, 1
+						on_press: root.plus_y()	
+
+					TextInput:
+						id: text_y
+						size_hint: 0.1, 1 
+						text: str(round(y.value, 2)) 
+						font_size: '30sp'
+						multiline: False
+						on_text_validate: root.text_y()
+						text_size: self.size
+                		halign: 'center'
+                		padding: [0, (self.height-self.line_height)/2]
+
+				BoxLayout:
+
+					Label:
+						size_hint: 0.1, 1
+						text: 'z' 
+
+					Button: 
+						id: minus_z
+						text: '-'
+						font_size: '50sp'
+						size_hint: 0.1, 1	
+						on_press: root.minus_z()
+
+					Slider: 
+						id: z
+						min: -5
+						max: 5
+						step: 0.1
+						orientation: 'horizontal'
+
+					Button: 
+						id: plus_z
+						text: '+'
+						font_size: '50sp'
+						size_hint: 0.1, 1	
+						on_press: root.plus_z()
+
+					TextInput:
+						id: text_z
+						size_hint: 0.1, 1 
+						text: str(round(z.value, 2)) 
+						font_size: '30sp'
+						multiline: False
+						on_text_validate: root.text_z()
+						text_size: self.size
+                		halign: 'center'
+                		padding: [0, (self.height-self.line_height)/2]
+
+				BoxLayout: 
+
+					Label:
+						size_hint: 0.1, 1
+						text: 'yaw' 
+
+					Button: 
+						id: minus_yaw
+						text: '-'
+						font_size: '50sp'
+						size_hint: 0.1, 1	
+						on_press: root.minus_yaw()
+
+					Slider: 
+						id: yaw
+						min: -250
+						max: 250
+						step: 1
+						orientation: 'horizontal'
+						on_touch_up: root.silder_x()
+
+					Button: 
+						id: plus_yaw
+						text: '+'
+						font_size: '50sp'
+						size_hint: 0.1, 1
+						on_press: root.plus_yaw()
+
+					TextInput:
+						id: text_yaw
+						size_hint: 0.1, 1 
+						text: str(round(yaw.value, 2)) 
+						font_size: '30sp'
+						multiline: False
+						on_text_validate: root.text_yaw()
+						text_size: self.size
+                		halign: 'center'
+                		padding: [0, (self.height-self.line_height)/2]
+
+			#Buttons
+
+			BoxLayout:
+				orientation: 'vertical'
+				padding: 20, 0, 20, 0
+				spacing: 20
+
+
+				BoxLayout:
+					orientation: 'horizontal'
+					spacing: 20
+
+					Button:
+						id: init
+						text: 'INIT MSF'
+						on_release: root.init()
+						color: 1,1,1,1
+						background_color: 205/255, 34/255, 34/255,1
+
+					Button:
+						id: switch
+						text: 'Switch'
+						on_press: root.switch()
+
+					Button:
+						disabled: True
+						id: start
+						text: 'Reset\nIntegrators'
+						on_press: root.start()
+						halign: 'center'
+
+					Button:
+						disabled: True
+						id: takeoff
+						text: 'Take Off'
+						on_press: root.takeoff()
+
+					Button:
+						disabled: True
+						id: GoTo
+						text: 'Go To Pole'
+						on_press: root.GoTo()
+						background_color: 75/255, 142/255, 250/255, 1
+
+					Button:
+						disabled: True
+						id: lower
+						text: 'Lower to\nPole'
+						halign: 'center'	
+						on_press: root.lower()
+						background_color: 75/255, 142/255, 250/255, 1
+
+					Button:
+						disabled: True
+						id: lift_pole
+						text: 'Lift Pole'
+						on_press: root.lift_pole()
+						background_color: 75/255, 142/255, 250/255, 1
+
+				BoxLayout:
+					orientation: 'horizontal'
+					spacing: 20 
+
+					Label:
+						id: StatusMessage
+						text: 'State Machine Status'
+						halign: 'center'
+
+					Label:
+						id: modeControl
+						font_size: '20sp'
+						text: 'Mode of Controller'
+
+					Button:
+						disabled: True
+						id: backToPos
+						text: 'Back to\nPosition Hold'
+						halign: 'center'
+						on_press: root.backToPos()
+
+					Button:
+						disabled: True
+						id: land
+						text: 'Land'
+						on_press: root.land()
+
+					Button:
+						id: GrabPole
+						text: 'Grab Pole'
+						on_press: root.GrabPole()
+						background_color: 75/255, 142/255, 250/255, 1
+					
+					Label:
+						id: modeTraj
+						text: 'Trajectory Mode'
+						halign: 'center'
+
+					Button:
+						id: reset
+						text: 'RESET'
+						on_press: root.reset()
+						background_color: 75/255, 142/255, 250/255, 1
+
+		BoxLayout:
+			orientation: 'horizontal'
+			margin: 20, 20, 20, 20
+			size_hint: 1, 0.1
+
+			Label:
+				id: console
+				text: 'Console:'
+				text_size: self.size
+				font_size: '40sp'
+				halign: 'left'
+				valign: 'middle'
+
+			Label:
+				size_hint: 0.2, 1
+				id: battery
+				text: 'Battery V = n/A'
+				text_size: self.size
+				halign: 'right'
+				valign: 'middle'
+
+<Label>:
+	font_size: '26sp'
+
+<Button>:
+	background_normal: ''
+	background_color: 120/255, 120/255, 120/255, 1
+	font_size: '26sp'
+	
+<Slider>:
+	cursor_image: 'Cursor.png'

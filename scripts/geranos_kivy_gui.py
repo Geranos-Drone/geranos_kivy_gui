@@ -12,7 +12,7 @@ import numpy as np
 import kivy
 from kivy.app import App
 from kivy.config import Config
-Config.set('graphics','window_state','maximized') #fullscreen
+from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.uix.slider import Slider
 from kivy.uix.boxlayout import BoxLayout
@@ -573,6 +573,29 @@ class GeranosApp(App):
 
         return Container()
 
+class Geranos_smallApp(App):
+    def build(self):
+        self.icon = 'Geranos_GUI.png'
+        self.title = 'Geranos'
+
+        return Container()
 
 if __name__ == "__main__":
-    GeranosApp().run()
+
+    rospy.init_node('omav_gui')
+
+    try:
+        window_size = rospy.get_param('~window_size')
+    except Exception as e:
+        window_size="small"   
+    print(window_size)   
+
+    if(window_size == "small"):
+        Window.size = (1900, 400)      
+        Config.set('graphics','window_state','visible') #normal
+        Config.write()
+        app = Geranos_smallApp().run()
+    else:
+        Config.set('graphics','window_state','maximized') #fullscreen
+        Config.write()
+        app = GeranosApp().run()
