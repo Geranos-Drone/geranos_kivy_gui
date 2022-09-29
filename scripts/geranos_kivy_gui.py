@@ -24,7 +24,7 @@ import roslaunch
 import rospkg
 
 # services
-from std_srvs.srv import Trigger, SetBool, Empty
+from std_srvs.srv import Trigger, SetBool, Empty, SetBoolRequest
 from sensor_fusion_comm.srv import InitScale
 
 # messages
@@ -35,7 +35,6 @@ from nav_msgs.msg import Odometry
 from std_msgs.msg import String
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import PoseStamped, TransformStamped
-
 
 # print in yellow
 def print_warn(text):
@@ -63,6 +62,16 @@ class Container(BoxLayout):
 
         self.publish_wp_service = rospy.ServiceProxy('publish_wp', Empty)
 
+        self.toggle_service_topic = "/planner_node/toggle_running"
+        
+        try:
+            rospy.wait_for_service(self.toggle_service_topic, timeout=0.5)
+        except:
+            rospy.logwarn("Services not available")
+        
+
+        self.toggle_service = rospy.ServiceProxy(self.toggle_service_topic, SetBool)
+        
 
         #ROS Publisher
         self.waypoint_pub = rospy.Publisher("gui/waypoint", PoseStamped, queue_size = 10)
@@ -285,10 +294,12 @@ class Container(BoxLayout):
     #Fine Mode Button
     def fine_mode(self):
         if (self.FINEMODE == 0):
+            self.toggle_service(data=True)
             self.ids['fine_mode'].background_color = 0, 170/255, 0, 1.0
             self.FINEMODE = 1
             self.ids['console'].text = "Console:  Fine Mode enabled"
         else:
+            self.toggle_service(data=False)
             self.ids['fine_mode'].background_color = 120/255, 120/255, 120/255, 1
             self.FINEMODE = 0
             self.ids['console'].text = "Console:  Fine Mode disabled"
@@ -423,6 +434,9 @@ class Container(BoxLayout):
             "RcTeleOp": (120/255, 120/255, 120/255, 1)
         }
         return switcher.get(text, (1, 1, 1, 1))
+
+    def ToggleCallback(self, req, rec):
+        return True
 
     #--------------------------Sliders--------------------------------------
     
