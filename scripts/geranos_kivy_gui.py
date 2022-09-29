@@ -41,7 +41,6 @@ def print_warn(text):
     fg = lambda text, color: "\33[38;5;" + str(color) + "m" + str(text) + "\33[0m"
     print(fg(text, 11))
 
-
 class Container(BoxLayout):
 
     def __init__(self, **kwargs):
@@ -88,6 +87,7 @@ class Container(BoxLayout):
         self.POLEMODE = 0
         self.PUBLISHWP = 0
         self.FINEMODE = 0
+        self.TOGGLE = 0
         self.OdometryRecieved = 0
         self.ImuRecieved = 0
         self.ViconRecieved = 0
@@ -214,10 +214,17 @@ class Container(BoxLayout):
             self.publish_wp_service()
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
             print("Publish Waypoints disabled")
-        go_to_pole_service = rospy.ServiceProxy('go_to_pole_service', Empty)
-        print("Request Sending to Go to Pole")
-        self.ids['console'].text = "Console:  Request sent to go to Pole"
-        go_to_pole_service()
+        
+        if (self.TOGGLE == 0):
+            self.toggle_service(data=True)
+            self.ids['GoTo'].background_color = 0, 170/255, 0, 1.0
+            self.TOGGLE = 1
+            self.ids['console'].text = "Console:  Planner enabled"
+        else:
+            self.toggle_service(data=False)
+            self.ids['GoTo'].background_color = 120/255, 120/255, 120/255, 1
+            self.TOGGLE = 0
+            self.ids['console'].text = "Console:  Planner disabled"
 
     #Trajectory Reset Button
     def reset(self):
@@ -294,12 +301,10 @@ class Container(BoxLayout):
     #Fine Mode Button
     def fine_mode(self):
         if (self.FINEMODE == 0):
-            self.toggle_service(data=True)
             self.ids['fine_mode'].background_color = 0, 170/255, 0, 1.0
             self.FINEMODE = 1
             self.ids['console'].text = "Console:  Fine Mode enabled"
         else:
-            self.toggle_service(data=False)
             self.ids['fine_mode'].background_color = 120/255, 120/255, 120/255, 1
             self.FINEMODE = 0
             self.ids['console'].text = "Console:  Fine Mode disabled"
@@ -398,23 +403,18 @@ class Container(BoxLayout):
         self.ids['modeTraj'].text = "Mode =\n"+msg.data
         mode = self.ids['modeTraj'].text
         if(mode == "PLACE_WHITE"):
-            self.ids['GoTo'].text = "Go To Mount"
             self.ids['lower'].text = "Lower to\nplace"
             self.ids['lift_pole'].text = "Fly up"
         elif (mode == "GET_GREY"):
-            self.ids['GoTo'].text = "Go To Grey"
             self.ids['lower'].text = "Lower to\nPole"
             self.ids['lift_pole'].text = "Lift Pole"
         elif (mode == "PLACE_GREY"):
-            self.ids['GoTo'].text = "Go To Mount"
             self.ids['lower'].text = "Lower to\nplace"
             self.ids['lift_pole'].text = "Fly up"
         elif (mode == "DONE"):
-            self.ids['GoTo'].disabled = True
             self.ids['lower'].disabled = True
             self.ids['lift_pole'].disabled = True
         else:
-            self.ids['GoTo'].text = "Go To White"
             self.ids['lower'].text = "Lower to\nPole"
             self.ids['lift_pole'].text = "Lift Pole"
 
@@ -582,15 +582,16 @@ class Container(BoxLayout):
 
 class GeranosApp(App):
     def build(self):
-        self.icon = 'Geranos_GUI.png'
-        self.title = 'Geranos'
+        app_icon = './Geranos_GUI.ico'
+        title = 'Geranos'
 
         return Container()
 
 class Geranos_smallApp(App):
     def build(self):
-        self.icon = 'Geranos_GUI.png'
-        self.title = 'Geranos'
+        print("arrived")
+        app_icon = './Geranos_GUI.ico'
+        title = 'Geranos'
 
         return Container()
 
@@ -613,3 +614,4 @@ if __name__ == "__main__":
         Config.set('graphics','window_state','maximized') #fullscreen
         Config.write()
         app = GeranosApp().run()
+
