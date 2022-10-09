@@ -61,7 +61,7 @@ class Container(BoxLayout):
 
         self.publish_wp_service = rospy.ServiceProxy('publish_wp', Empty)
 
-        self.toggle_service_topic = "/planner_node/toggle_running"
+        self.toggle_service_topic = "/geranos_planning/auto_toggle"
         
         try:
             rospy.wait_for_service(self.toggle_service_topic, timeout=0.5)
@@ -96,7 +96,6 @@ class Container(BoxLayout):
         self.y_value = 0
         self.z_value = 0
         self.yaw_value = 0
-
 
     #-------------------------------Buttons--------------------------------------------------------
 
@@ -275,6 +274,13 @@ class Container(BoxLayout):
 
     #Publish Waypoints Button
     def publish_wp(self):
+
+        if(self.TOGGLE == 1):
+            self.TOGGLE = 0
+            self.GoTo()
+            self.ids['GoTo'].background_color = 120/255, 120/255, 120/255, 1
+            print("planner disabled")
+
         print("Publish WP")
         if(self.PUBLISHWP == 0):
             self.reset_wp()
