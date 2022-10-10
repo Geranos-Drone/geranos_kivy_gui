@@ -62,6 +62,7 @@ class Container(BoxLayout):
         self.publish_wp_service = rospy.ServiceProxy('publish_wp', Empty)
 
         self.toggle_service_topic = "/geranos_planning/auto_toggle"
+        self.demo_state_sub = rospy.Subscriber("/geranos_planning/demo_state", String, self.DemoStateCallback);
         
         try:
             rospy.wait_for_service(self.toggle_service_topic, timeout=0.5)
@@ -329,6 +330,9 @@ class Container(BoxLayout):
         self.ids['console'].text = "Console:  Lifting Pole"
 
     #-------------------------------ROS-----------------------------------
+
+    def DemoStateCallback(self, msg):
+        self.ids['console'].text = "Console. " + msg.data
         
     def UAVStatusCallback(self, msg):
         voltage = msg.motors[0].voltage
