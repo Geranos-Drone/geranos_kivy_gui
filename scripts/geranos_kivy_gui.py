@@ -62,6 +62,7 @@ class Container(BoxLayout):
         self.publish_wp_service = rospy.ServiceProxy('publish_wp', Empty)
 
         self.toggle_service_topic = "/geranos_planning/auto_toggle"
+
         self.demo_state_sub = rospy.Subscriber("/geranos_planning/demo_state", String, self.DemoStateCallback);
         
         try:
@@ -71,6 +72,7 @@ class Container(BoxLayout):
         
 
         self.toggle_service = rospy.ServiceProxy(self.toggle_service_topic, SetBool)
+        self.skip_service = rospy.ServiceProxy("/geranos_planning/skip", Empty)
         
 
         #ROS Publisher
@@ -115,7 +117,7 @@ class Container(BoxLayout):
             self.ids['takeoff'].disabled = False
             self.ids['GoTo'].disabled = False
             self.ids['backToPos'].disabled = False
-            self.ids['lower'].disabled = False
+            self.ids['skip'].disabled = False
             self.ids['lift_pole'].disabled = False
             self.ids['land'].disabled = False
         except Exception as exc:
@@ -233,7 +235,7 @@ class Container(BoxLayout):
         print("Resetting Trajectories")
         reset_service()
         self.ids['GoTo'].disabled = False
-        self.ids['lower'].disabled = False
+        self.ids['skip'].disabled = False
         self.ids['lift_pole'].disabled = False
 
     #Back to Position Hold Button
@@ -244,16 +246,14 @@ class Container(BoxLayout):
         print("Going back to position hold.")
 
     #Lower to Pole Button
-    def lower(self):
+    def skip(self):
         if(self.PUBLISHWP == 1):
             self.PUBLISHWP = 0
             self.publish_wp_service()
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
             print("Publish Waypoints disabled")
-        grab_pole_service = rospy.ServiceProxy('grab_pole_service', Empty)
-        print("Request Sending to Lower Drone to Grab Pole")
-        grab_pole_service()
-        self.ids['console'].text = "Console:  Lowering to Grab Position"
+        self.skip_service()
+        self.ids['console'].text = "Console:  Skipped"
 
     #Reset Waypoints Button
     def reset_wp(self):
@@ -413,19 +413,14 @@ class Container(BoxLayout):
         self.ids['modeTraj'].text = "Mode =\n"+msg.data
         mode = self.ids['modeTraj'].text
         if(mode == "PLACE_WHITE"):
-            self.ids['lower'].text = "Lower to\nplace"
             self.ids['lift_pole'].text = "Fly up"
         elif (mode == "GET_GREY"):
-            self.ids['lower'].text = "Lower to\nPole"
             self.ids['lift_pole'].text = "Lift Pole"
         elif (mode == "PLACE_GREY"):
-            self.ids['lower'].text = "Lower to\nplace"
             self.ids['lift_pole'].text = "Fly up"
         elif (mode == "DONE"):
-            self.ids['lower'].disabled = True
             self.ids['lift_pole'].disabled = True
         else:
-            self.ids['lower'].text = "Lower to\nPole"
             self.ids['lift_pole'].text = "Lift Pole"
 
     def updateState(self, msg):
