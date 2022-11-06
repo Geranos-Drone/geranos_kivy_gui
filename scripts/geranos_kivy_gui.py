@@ -47,23 +47,23 @@ class Container(BoxLayout):
         super(Container, self).__init__(**kwargs)
         self.uav_state_sub = rospy.Subscriber("uavstate", UAVStatus, callback=self.UAVStatusCallback, queue_size=1)
         self.dynamixel_state_sub = rospy.Subscriber("dynamixel_state/state_info", String, self.updateDynamixelState)
-        self.odometry_sub = rospy.Subscriber("transformed_odometry", Odometry, callback=self.OdometryCallback)
-        self.motor_speed_sub = rospy.Subscriber("command/motor_speed", Actuators, callback=self.MotorSpeedCallback, queue_size=1)
-        self.control_node_sub = rospy.Subscriber("impedance_module/control_mode", String, self.updateControlMode)
+        self.odometry_sub = rospy.Subscriber("/boreas/msf_core/odometry", Odometry, callback=self.OdometryCallback)
+        self.motor_speed_sub = rospy.Subscriber("/geranos/command/motor_speed", Actuators, callback=self.MotorSpeedCallback, queue_size=1)
+        self.control_node_sub = rospy.Subscriber("/geranos/impedance_module/control_mode", String, self.updateControlMode)
         self.pole_trajectory_sub = rospy.Subscriber("geranos_planner/mode_info", String, self.updateTrajMode)
         self.state_machine_sub = rospy.Subscriber("state_machine/state_info", String, self.updateState)
         self.msf_checker_sub = rospy.Subscriber("state_machine/state_info", String, self.updateState)
-        self.imu_sub = rospy.Subscriber("/vectornav/IMU", Imu, self.imuCallback)
-        self.vicon_sub = rospy.Subscriber("geranos_boreas/vrpn_client/estimated_transform", TransformStamped, self.viconCallback)
-        self.pole_mount_vicon_sub = rospy.Subscriber("geranos_pole_mount/vrpn_client/estimated_transform", TransformStamped, self.PoleMountViconCallback)
-        self.pole_white_vicon_sub = rospy.Subscriber("geranos_pole_white/vrpn_client/estimated_transform", TransformStamped, self.PoleWhiteViconCallback)
-        self.pole_grey_vicon_sub = rospy.Subscriber("geranos_pole_grey/vrpn_client/estimated_transform", TransformStamped, self.PoleGreyViconCallback)
+        self.imu_sub = rospy.Subscriber("/boreas/vectornav/IMU", Imu, self.imuCallback)
+        self.vicon_sub = rospy.Subscriber("/geranos/geranos_boreas/vrpn_client/estimated_transform", TransformStamped, self.viconCallback)
+        self.pole_mount_vicon_sub = rospy.Subscriber("/geranos/geranos_pole_mount/vrpn_client/estimated_transform", TransformStamped, self.PoleMountViconCallback)
+        self.pole_white_vicon_sub = rospy.Subscriber("/geranos/geranos_pole_white/vrpn_client/estimated_transform", TransformStamped, self.PoleWhiteViconCallback)
+        self.pole_grey_vicon_sub = rospy.Subscriber("/geranos/geranos_pole_grey/vrpn_client/estimated_transform", TransformStamped, self.PoleGreyViconCallback)
 
         self.publish_wp_service = rospy.ServiceProxy('publish_wp', Empty)
 
-        self.toggle_service_topic = "/geranos_planning/auto_toggle"
+        self.toggle_service_topic = "/geranos/geranos_planning/auto_toggle"
 
-        self.demo_state_sub = rospy.Subscriber("/geranos_planning/demo_state", String, self.DemoStateCallback);
+        self.demo_state_sub = rospy.Subscriber("/geranos/geranos_planning/demo_state", String, self.DemoStateCallback);
         
         try:
             rospy.wait_for_service(self.toggle_service_topic, timeout=0.5)
@@ -72,7 +72,7 @@ class Container(BoxLayout):
         
 
         self.toggle_service = rospy.ServiceProxy(self.toggle_service_topic, SetBool)
-        self.skip_service = rospy.ServiceProxy("/geranos_planning/skip", Empty)
+        self.skip_service = rospy.ServiceProxy("/geranos/geranos_planning/skip", Empty)
         
 
         #ROS Publisher
@@ -104,7 +104,7 @@ class Container(BoxLayout):
 
     #INIT_MSF Button
     def init(self):
-        init_service = rospy.ServiceProxy('pose_sensor/pose_sensor/initialize_msf_scale', InitScale)
+        init_service = rospy.ServiceProxy('/boreas/pose_sensor/pose_sensor/initialize_msf_scale', InitScale)
         try:
             init_service(1.0)
             self.ids['console'].text = "Console:  MSF initialized"
@@ -127,7 +127,7 @@ class Container(BoxLayout):
     #Switch Button
     def switch(self):
         try:
-            switch_service = rospy.ServiceProxy('impedance_module/switch_control_params', Empty)
+            switch_service = rospy.ServiceProxy('/geranos/impedance_module/switch_control_params', Empty)
             switch_service()
             self.ids['console'].text = "Console:  request sent to switch params"
             print("request sent to switch params")
@@ -139,7 +139,7 @@ class Container(BoxLayout):
     def start(self):
         self.ids['console'].text = "Console:  Resetting Integrators"
         print("Resetting Integrators.")
-        reset_integrator_service = rospy.ServiceProxy('impedance_module/reset_integrator', Empty)
+        reset_integrator_service = rospy.ServiceProxy('/geranos/impedance_module/reset_integrator', Empty)
         try:
             reset_integrator_service()
             print("Integrators reset.")
@@ -156,7 +156,7 @@ class Container(BoxLayout):
             print("Publish Waypoints disabled")
         
         print("take off")
-        reset_integrator_service = rospy.ServiceProxy('impedance_module/reset_integrator', Empty)
+        reset_integrator_service = rospy.ServiceProxy('/geranos/impedance_module/reset_integrator', Empty)
         takeoff_service = rospy.ServiceProxy('take_off', Empty)
         try:
             reset_integrator_service()
