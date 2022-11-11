@@ -48,7 +48,7 @@ class Container(BoxLayout):
         self.uav_state_sub = rospy.Subscriber("uavstate", UAVStatus, callback=self.UAVStatusCallback, queue_size=1)
         self.dynamixel_state_sub = rospy.Subscriber("dynamixel_state/state_info", String, self.updateDynamixelState)
         self.odometry_sub = rospy.Subscriber("/boreas/msf_core/odometry", Odometry, callback=self.OdometryCallback)
-        self.motor_speed_sub = rospy.Subscriber("/geranos/command/motor_speed", Actuators, callback=self.MotorSpeedCallback, queue_size=1)
+        self.motor_speed_sub = rospy.Subscriber("/boreas/command/motor_speed", Actuators, callback=self.MotorSpeedCallback, queue_size=1)
         self.control_node_sub = rospy.Subscriber("/geranos/impedance_module/control_mode", String, self.updateControlMode)
         self.pole_trajectory_sub = rospy.Subscriber("geranos_planner/mode_info", String, self.updateTrajMode)
         self.state_machine_sub = rospy.Subscriber("state_machine/state_info", String, self.updateState)
@@ -180,10 +180,15 @@ class Container(BoxLayout):
             self.publish_wp_service()
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
             print("Publish Waypoints disabled")
-        land_service = rospy.ServiceProxy('/geranos/land', Empty)
-        land_service()
-        self.ids['console'].text = "Console:  Landing"
-        print("Landing.")
+        try:
+            land_service = rospy.ServiceProxy('/geranos/land', Empty)
+            land_service()
+            self.ids['console'].text = "Console:  Landing"
+            print("Landing.")
+        except rospy.ServiceException as exc:
+            print_warn("Was not able to land, error: {}".format(exc))
+            self.ids['console'].text = "Console:  Not able to land, error: %s"%exc
+
 
 
     #Grab and Realease Pole Button
@@ -407,7 +412,7 @@ class Container(BoxLayout):
             self.ids['pole_grey'].source = 'Checkbox_checked.png'
             
     def updateControlMode(self, msg):
-        self.ids['modeControl'].text = "Mode = "+msg.data
+        self.ids['modeControl'].text = "Mode =\n"+msg.data
 
     def updateTrajMode(self, msg):
         self.ids['modeTraj'].text = "Mode =\n"+msg.data
@@ -425,7 +430,7 @@ class Container(BoxLayout):
 
     def updateState(self, msg):
         colour = self.colourSwitcher(msg.data)
-        self.ids['StatusMessage'].text = "Control Status =\n"+msg.data
+        self.ids['StatusMessage'].text = "Control\nStatus =\n"+msg.data
         self.ids['StatusMessage'].color = colour
 
     #colours for different Control States
