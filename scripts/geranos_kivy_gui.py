@@ -157,7 +157,7 @@ class Container(BoxLayout):
         
         print("take off")
         reset_integrator_service = rospy.ServiceProxy('/geranos/impedance_module/reset_integrator', Empty)
-        takeoff_service = rospy.ServiceProxy('take_off', Empty)
+        takeoff_service = rospy.ServiceProxy('/geranos/takeoff', Empty)
         try:
             reset_integrator_service()
             self.ids['console'].text = "Console:  Integrators reset"
@@ -180,7 +180,7 @@ class Container(BoxLayout):
             self.publish_wp_service()
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
             print("Publish Waypoints disabled")
-        land_service = rospy.ServiceProxy('land', Empty)
+        land_service = rospy.ServiceProxy('/geranos/land', Empty)
         land_service()
         self.ids['console'].text = "Console:  Landing"
         print("Landing.")
