@@ -436,17 +436,16 @@ class Container(BoxLayout):
     #colours for different Control States
     def colourSwitcher(self, text):
         switcher = {
-            "Inactive": (205/205, 34/255, 34/255, 1), #red
-            "RemoteControl": (1, 1, 1, 1),
-            "RemoteControlReadyForOdometry": (120/255, 120/255, 120/255, 1),
-            "HaveOdometry": (120/255, 120/255, 120/255, 1),
-            "PoseHold": (120/255, 120/255, 120/255, 1),
-            "RcTeleOp": (120/255, 120/255, 120/255, 1)
+            "Inactive": (205/205, 34/255, 34/255, 1),           # red
+            "WaitingForOdometry": (255/255, 111/255, 0/255, 1), # orange
+            "PoseHold": (56/255, 142/255, 60/255, 1),           # green
+            "RcPosCtrl": (120/255, 120/255, 120/255, 1),        # grey
+            "RcVelCtrl": (120/255, 120/255, 120/255, 1)
         }
-        return switcher.get(text, (1, 1, 1, 1))
+        return switcher.get(text, (1, 1, 1, 1)) # default white
 
-    def ToggleCallback(self, req, rec):
-        return True
+    # def ToggleCallback(self, req, rec):
+    #     return True
 
     #--------------------------Sliders--------------------------------------
     
