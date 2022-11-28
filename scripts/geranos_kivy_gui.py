@@ -45,7 +45,7 @@ class Container(BoxLayout):
 
     def __init__(self, **kwargs):
         super(Container, self).__init__(**kwargs)
-        self.uav_state_sub = rospy.Subscriber("uavstate", UAVStatus, callback=self.UAVStatusCallback, queue_size=1)
+        self.uav_state_sub = rospy.Subscriber("/boreas/uavstate", UAVStatus, callback=self.UAVStatusCallback, queue_size=1)
         self.dynamixel_state_sub = rospy.Subscriber("dynamixel_state/state_info", String, self.updateDynamixelState)
         self.odometry_sub = rospy.Subscriber("/geranos/transformed_odometry", Odometry, callback=self.OdometryCallback)
         self.motor_speed_sub = rospy.Subscriber("/boreas/command/motor_speed", Actuators, callback=self.MotorSpeedCallback, queue_size=1)
