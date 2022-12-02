@@ -61,7 +61,8 @@ class Container(BoxLayout):
 
         self.publish_wp_service = rospy.ServiceProxy('publish_wp', Empty)
 
-        self.toggle_service_topic = "/geranos_planning/auto_toggle"
+        self.toggle_service_topic1 = "/geranos_planning/auto_toggle"
+        self.toggle_service_topic2 = "/geranos_eval/auto_toggle"
 
         self.demo_state_sub = rospy.Subscriber("/geranos_planning/demo_state", String, self.DemoStateCallback);
         
@@ -71,7 +72,8 @@ class Container(BoxLayout):
             rospy.logwarn("Services not available")
         
 
-        self.toggle_service = rospy.ServiceProxy(self.toggle_service_topic, SetBool)
+        self.toggle_service1 = rospy.ServiceProxy(self.toggle_service_topic1, SetBool)
+        self.toggle_service2 = rospy.ServiceProxy(self.toggle_service_topic2, SetBool)
         self.skip_service = rospy.ServiceProxy("/geranos_planning/skip", Empty)
         
 
@@ -218,12 +220,27 @@ class Container(BoxLayout):
             print("Publish Waypoints disabled")
         
         if (self.TOGGLE == 0):
-            self.toggle_service(data=True)
+            try:
+                self.toggle_service1(data=True)
+            except Exception as e:
+                print_warn(e)
+            try:
+                self.toggle_service2(data=True)
+            except Exception as e:
+                print_warn(e)
+
             self.ids['GoTo'].background_color = 0, 170/255, 0, 1.0
             self.TOGGLE = 1
             self.ids['console'].text = "Console:  Planner enabled"
         else:
-            self.toggle_service(data=False)
+            try:
+                self.toggle_service1(data=False)
+            except Exception as e:
+                print_warn(e)
+            try:
+                self.toggle_service2(data=False)
+            except Exception as e:
+                print_warn(e)
             self.ids['GoTo'].background_color = 120/255, 120/255, 120/255, 1
             self.TOGGLE = 0
             self.ids['console'].text = "Console:  Planner disabled"
