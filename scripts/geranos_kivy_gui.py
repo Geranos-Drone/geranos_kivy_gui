@@ -226,7 +226,6 @@ class Container(BoxLayout):
             self.toggle_service(data=True)
             self.ids['GoTo'].background_color = 0, 170/255, 0, 1.0
             self.TOGGLE = 1
-            self.ids['console'].text = "Console:  Planner enabled"
         else:
             self.toggle_service(data=False)
             self.ids['GoTo'].background_color = 120/255, 120/255, 120/255, 1
@@ -258,7 +257,6 @@ class Container(BoxLayout):
             self.ids['publish_wp'].background_color = 120/255, 120/255, 120/255, 1
             print("Publish Waypoints disabled")
         self.skip_service()
-        self.ids['console'].text = "Console:  Skipped"
 
     #Reset Waypoints Button
     def reset_wp(self):
